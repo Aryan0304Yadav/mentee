@@ -1,0 +1,67 @@
+-- Table for entry point details
+USE college_db;
+
+CREATE TABLE student_details (
+    prn VARCHAR(10) NOT NULL PRIMARY KEY,
+    fullname VARCHAR(255) NOT NULL,
+    ac_id VARCHAR(50) NOT NULL,
+    FOREIGN KEY (ac_id) REFERENCES academic_id(ac_id)
+);
+
+-- Table for core personal details
+CREATE TABLE student_personal (
+    prn VARCHAR(10) NOT NULL PRIMARY KEY,
+    photo TEXT,
+    date_of_birth DATE NOT NULL,
+    mother_tongue VARCHAR(50) NOT NULL,
+    blood_group VARCHAR(3),
+    year_of_admission YEAR NOT NULL,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Table for parents' details
+CREATE TABLE student_parents (
+    prn VARCHAR(10) NOT NULL,
+    father_name VARCHAR(255) NOT NULL,
+    father_occupation VARCHAR(255) NOT NULL,
+    father_mobile_number VARCHAR(15) NOT NULL,
+    mother_name VARCHAR(255) NOT NULL,
+    mother_occupation VARCHAR(255) NOT NULL,
+    mother_mobile_number VARCHAR(15) NOT NULL,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Table for educational details
+CREATE TABLE student_education (
+    prn VARCHAR(10) NOT NULL,
+    ssc_percentage FLOAT NOT NULL,
+    ssc_medium VARCHAR(50) NOT NULL,
+    ssc_board VARCHAR(50) NOT NULL,
+    hsc_or_diploma_percentage FLOAT NOT NULL,
+    hsc_or_diploma_medium VARCHAR(50) NOT NULL,
+    hsc_or_diploma_board VARCHAR(50) NOT NULL,
+    cet_percentile FLOAT,
+    jee_percentile FLOAT,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Table for other details
+CREATE TABLE student_other (
+    prn VARCHAR(10) NOT NULL,
+    hobbies TEXT,
+    strengths TEXT,
+    weakness TEXT,
+    short_term_goals TEXT,
+    long_term_goals TEXT,
+    extra_curricular TEXT,
+    FOREIGN KEY (prn) REFERENCES student_details(prn)
+);
+
+-- Academic details table
+CREATE TABLE academic_id (
+    semester INT NOT NULL,
+    branch VARCHAR(50) NOT NULL,
+    division CHAR(1) NOT NULL,
+    batch VARCHAR(10) NOT NULL,
+    ac_id VARCHAR(50) NOT NULL PRIMARY KEY
+);

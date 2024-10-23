@@ -1,0 +1,68 @@
+/* Message Container */
+.content {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Header */
+  .content--header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header--title {
+    color: #526d82;
+  }
+  
+  /* Card Container */
+  .card--container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-evenly; /* Adjust for spacing */
+    margin-top: 2rem;
+  }
+  
+  /* Card */
+  .card {
+    flex: 1 1 21%; /* Adjusted to fit multiple cards with gaps */
+    max-width: 23%; /* Ensures card does not exceed 23% of the row width */
+    background: #dde6ed;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
+    box-sizing: border-box;
+  }
+  
+  .card:hover {
+    transform: scale(1.04);
+    cursor: pointer;
+  }
+  
+  .card--cover {
+    font-size: 2rem; /* Adjusted for better visibility */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    color: #4a5568; /* Default color of the icons */
+    transition: color 0.3s ease-in-out; /* Smooth color transition */
+  }
+  
+  /* Change the icon color on card hover */
+  .card:hover .card--cover .card-icon {
+    color: #145090; /* Change to desired hover color */
+  }
+  
+  .card--title h2 {
+    font-size: 1.2rem; /* Adjusted font size */
+    margin: 0;
+    color: #333;
+  }
+  

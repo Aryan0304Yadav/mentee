@@ -1,0 +1,79 @@
+.form-details-form {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+
+.form-details-form h2 {
+  color: #526d82;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-details-form .form-row {
+  font-weight: bold;
+  color: #4a5568;
+  display: flex;
+  gap: 20px; /* Space between the two fields */
+  margin-bottom: 20px; /* Space below each row */
+}
+
+.form-details-form .form-row label {
+  flex: 1; /* Each label/input pair takes up equal space */
+  min-width: 0; /* Prevents overflow issues */
+}
+
+.form-details-form input[type="text"],
+.form-details-form input[type="email"],
+.form-details-form input[type="tel"],
+.form-details-form input[type="file"],
+.form-details-form input[type="date"],
+.form-details-form select,
+.form-details-form textarea {
+  width: 100%; /* Full width of its parent (the label) */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dde6ed;
+  box-sizing: border-box;
+  background: #dde6ed;
+  color: #526d82;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-details-form input[type="text"]:focus,
+.form-details-form input[type="email"]:focus,
+.form-details-form input[type="tel"]:focus,
+.form-details-form input[type="file"]:focus,
+.form-details-form input[type="date"]:focus,
+.form-details-form select:focus,
+.form-details-form textarea:focus {
+  border-color: #526d82;
+}
+
+.form-details-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-details-form button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #526d82;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-details-form button[type="submit"]:hover {
+  background-color: #145090;
+}

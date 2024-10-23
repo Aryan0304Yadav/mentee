@@ -1,0 +1,74 @@
+/* Reset all HTML elements */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+  }
+  
+  body {
+	font-family: sans-serif;
+	min-height: 100vh;
+	color: #555;
+	background-color: #fff;
+  }
+  
+  .chart {
+	max-width: 900px;
+	height: 450px;
+	padding: 50px;
+	margin: 0 auto;
+  }
+  
+  /* Dropdown container */
+  .dropdowns {
+	display: flex;
+	justify-content: center; /* Center align dropdowns horizontally */
+	gap: 20px; /* Space between dropdowns */
+	margin-bottom: 30px; /* Space below the dropdowns */
+  }
+  
+  /* Label for dropdowns */
+  .dropdowns label {
+	display: flex;
+	flex-direction: column;
+	color: #526d82;
+	font-size: 14px;
+	margin: 0;
+  }
+  
+  /* Dropdown styling */
+  .dropdowns select {
+	background: #dde6ed;
+	padding: 8px 10px;
+	border-radius: 10px;
+	border: none;
+	color: #333;
+	font-size: 14px;
+	outline: none;
+	transition: background 0.2s ease-in-out;
+	width: 200px; /* Adjust width to fit your design */
+  }
+  
+  .dropdowns select:focus {
+	background: #c4d1e0;
+  }
+  
+  /* Option styling */
+  .dropdowns option {
+	background: #dde6ed;
+	color: #333;
+  }
+  
+  /* Chart container */
+  .chart-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+  }
+  
+  .chart-container canvas {
+	width: 100%;
+	height: auto;
+  }
+  

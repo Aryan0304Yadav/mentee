@@ -1,0 +1,85 @@
+.academic-details-form {
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px; /* Added more padding for spacing */
+  background: #f8f9fa;
+  border-radius: 12px; /* Slightly increased border radius for smoother corners */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Increased shadow for better depth */
+  box-sizing: border-box;
+}
+
+.academic-details-form h2 {
+  color: #526d82;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1.75rem; /* Increased font size for better visibility */
+  font-weight: 600; /* Bold heading */
+}
+
+.academic-details-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.academic-details-form input[type="number"] {
+  width: 100%;
+  padding: 12px; /* Increased padding for a more spacious input feel */
+  margin-bottom: 15px; /* Reduced margin for better spacing */
+  border-radius: 6px; /* Slightly larger border-radius */
+  border: 1px solid #dde6ed;
+  background: #dde6ed;
+  color: #526d82;
+  font-size: 1rem; /* Larger font size for easier readability */
+  outline: none;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.academic-details-form input[type="number"]:focus {
+  border-color: #526d82;
+  background-color: #eef3f7; /* Subtle background change on focus */
+}
+
+.academic-details-form .error {
+  color: #ff4d4d;
+  font-size: 0.875rem;
+  margin-top: 5px;
+  display: block;
+  font-weight: 500; /* Slightly bolder error messages */
+}
+
+.academic-details-form button[type="submit"],
+.academic-details-form .form-navigation button {
+  padding: 12px 25px; /* Larger button size for better clickability */
+  background-color: #526d82;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: block;
+  width: 100%; /* Buttons will span the full width */
+  box-sizing: border-box;
+  font-size: 1.1rem; /* Increased button font size */
+}
+
+.academic-details-form button[type="submit"]:hover,
+.academic-details-form .form-navigation button:hover {
+  background-color: #145090;
+}
+
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form-navigation button {
+  width: 48%; /* Ensure the buttons only take half the width */
+}
+
+.form-navigation button:first-of-type {
+  margin-right: 4%; /* Add gap between the Previous and Next buttons */
+}

@@ -1,0 +1,78 @@
+.misc-details-form {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.misc-details-form h2 {
+  color: #526d82;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.misc-details-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.misc-details-form input[type="text"],
+.misc-details-form textarea,
+.misc-details-form input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #dde6ed;
+  box-sizing: border-box;
+  background: #dde6ed;
+  color: #526d82;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.misc-details-form input[type="text"]:focus,
+.misc-details-form textarea:focus,
+.misc-details-form input[type="file"]:focus {
+  border-color: #526d82;
+}
+
+.misc-details-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.large-textarea {
+  height: 150px; /* Adjust height as needed */
+}
+
+.misc-details-form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.misc-details-form button[type="submit"],
+.misc-details-form button[type="button"] {
+  background-color: #526d82;
+  color: #fff;
+}
+
+.misc-details-form button[type="submit"]:hover,
+.misc-details-form button[type="button"]:hover {
+  background-color: #145090;
+}
+
+.misc-details-form button[type="button"] {
+  margin-top: 15px; /* Adjust this value to create a gap between the buttons */
+}

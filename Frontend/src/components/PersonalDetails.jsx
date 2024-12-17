@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom"; 
+import { useParams } from "react-router-dom";
 import { DateTime } from "luxon";
 import "../styles/PersonalDetails.css";
 
@@ -9,11 +9,13 @@ const PersonalDetails = () => {
   const [formData, setFormData] = useState({
     photo: null,
     branch: "",
-    ac_id: "", 
+    ac_id: "",
     fullname: "",
     date_of_birth: "",
     year_of_admission: "",
     mother_tongue: "",
+    blood_group: "",
+    health_problems: "",
     current_address: "",
     father_name: "",
     father_occupation: "",
@@ -40,11 +42,15 @@ const PersonalDetails = () => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await axios.get(`https://mentor-mentee-backend.vercel.app/students/${prn}`);
+        const response = await axios.get(
+          `https://mentor-mentee-backend.vercel.app/students/${prn}`
+        );
         const studentData = response.data;
 
         if (studentData.date_of_birth) {
-          studentData.date_of_birth = DateTime.fromISO(studentData.date_of_birth).toISODate();
+          studentData.date_of_birth = DateTime.fromISO(
+            studentData.date_of_birth
+          ).toISODate();
         }
 
         setFormData(studentData);
@@ -73,7 +79,10 @@ const PersonalDetails = () => {
         date_of_birth: DateTime.fromISO(formData.date_of_birth).toISO(),
       };
 
-      await axios.put(`https://mentor-mentee-backend.vercel.app/students/${prn}`, updatedData);
+      await axios.put(
+        `https://mentor-mentee-backend.vercel.app/students/${prn}`,
+        updatedData
+      );
       alert("Student details updated successfully");
     } catch (error) {
       console.error("Error updating student details:", error);
@@ -132,8 +141,29 @@ const PersonalDetails = () => {
               required
             />
           </label>
+
+          <label>
+            Residential Landline:
+            <input
+              type="tel"
+              name="landline"
+              value={formData.landline}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+
+          <label>
+            Health Problems:
+            <textarea
+              name="health_problems"
+              value={formData.health_problems}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
         </div>
-        
+
         {!isEditable ? (
           <button type="button" onClick={handleEdit}>
             Edit
@@ -192,94 +222,11 @@ const PersonalDetails = () => {
         </div>
         <div className="form-row">
           <label>
-            Current Address:
-            <textarea
-              name="current_address"
-              value={formData.current_address}
-              readOnly
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            Father's Name:
+            Blood Group:
             <input
               type="text"
-              name="father_name"
-              value={formData.father_name}
-              readOnly
-            />
-          </label>
-
-          <label>
-            Father's Occupation:
-            <input
-              type="text"
-              name="father_occupation"
-              value={formData.father_occupation}
-              readOnly
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            Father's Phone Number:
-            <input
-              type="tel"
-              name="father_mobile_number"
-              value={formData.father_mobile_number}
-              readOnly
-            />
-          </label>
-
-          <label>
-            Residential Landline:
-            <input
-              type="tel"
-              name="landline"
-              value={formData.landline}
-              readOnly
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            Mother's Name:
-            <input
-              type="text"
-              name="mother_name"
-              value={formData.mother_name}
-              readOnly
-            />
-          </label>
-
-          <label>
-            Mother's Occupation:
-            <input
-              type="text"
-              name="mother_occupation"
-              value={formData.mother_occupation}
-              readOnly
-            />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            Mother's Phone Number:
-            <input
-              type="tel"
-              name="mother_mobile_number"
-              value={formData.mother_mobile_number}
-              readOnly
-            />
-          </label>
-
-          <label>
-            Residence Option:
-            <input
-              type="text"
-              name="residenceOption"
-              value={formData.residenceOption}
+              name="blood_group"
+              value={formData.blood_group}
               readOnly
             />
           </label>

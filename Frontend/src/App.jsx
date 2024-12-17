@@ -5,36 +5,56 @@ import Content from './components/Content';
 import Profile from './components/Profile';
 import PersonalDetails from './components/PersonalDetails';
 import MiscDetails from './components/MiscDetails';
-import AcademicDetails from './components/AcademicDetails'; // Import AcademicDetails component
+import AcademicDetails from './components/AcademicDetails';
+import ResidentialDetails from './components/ResidentialDetails';
+import PreAdmissionAcademicDetails from './components/PreAdmissionAcademicDetails';
+import PostAdmissionAcademicDetails from './components/PostAdmissionAcademicDetails'; // Updated import
+import Observations from './components/Observations'; // Ensure the Observations component exists
 import './App.css';
+
+// Define the PRN constant
+const PRN = "PRN002"; // Example PRN, can be dynamically fetched or passed down
 
 const App = () => {
   return (
     <Router>
       <div className='dashboard'>
-        <Sidebar />
+        <Sidebar prn={PRN} /> {/* Passing the PRN as a prop to Sidebar */}
         <div className="dashboard--content">
           <Routes>
             {/* Redirect root path to /dashboard */}
-            <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route path="/dashboard" element={<><Content /><Profile /></>} />
+            <Route path="/" element={<Navigate to={`/dashboard/${PRN}`} />} />
             <Route path="/dashboard/:prn" element={<><Content /><Profile /></>} />
 
+            {/* Personal Details Route */}
             <Route path="/personal-details" element={<PersonalDetails />} />
             <Route path="/personal-details/:prn" element={<PersonalDetails />} />
 
-            <Route path="/MiscDetails" element={<MiscDetails />} />
-            <Route path="/MiscDetails/:prn" element={<MiscDetails />} />
+            {/* Miscellaneous Details Route */}
+            <Route path="/misc-details" element={<MiscDetails />} />
+            <Route path="/misc-details/:prn" element={<MiscDetails />} />
 
-            {/* Add route for AcademicDetails */}
+            {/* Academic Details Routes */}
             <Route path="/academic-details" element={<AcademicDetails />} />
             <Route path="/academic-details/:prn" element={<AcademicDetails />} />
 
+            {/* New Routes for Additional Sections */}
+            <Route path="/residential-details" element={<ResidentialDetails />} />
+            <Route path="/residential-details/:prn" element={<ResidentialDetails />} />
+
+            <Route path="/pre-admission-academic-details" element={<PreAdmissionAcademicDetails />} />
+            <Route path="/pre-admission-academic-details/:prn" element={<PreAdmissionAcademicDetails />} />
+
+            <Route path="/post-admission-academic-details" element={<PostAdmissionAcademicDetails />} />
+            <Route path="/post-admission-academic-details/:prn" element={<PostAdmissionAcademicDetails />} />
+
+            <Route path="/observations" element={<Observations />} />
+            <Route path="/observations/:prn" element={<Observations />} />
           </Routes>
         </div>
       </div>
     </Router>
   );
-}
+};
 
 export default App;

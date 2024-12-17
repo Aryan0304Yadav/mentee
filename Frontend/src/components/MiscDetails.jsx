@@ -1,173 +1,116 @@
-import React, { useState } from "react";
-import '../styles/MiscDetails.css';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import "../styles/MiscDetails.css"; // Ensure the correct CSS file is imported
 
 const MiscDetails = () => {
-  const [formData, setFormData] = useState({
-    hobbies: "",
-    favoriteSubjects: "",
-    preferredLearningMethod: "",
-    otherComments: "",
-    interests: "",
-    preferredStudyEnvironment: "",
-    extracurricularActivities: "",
-    favoriteBooks: "",
-    certificate: null,  // For file upload
+  const { prn } = useParams(); // Get PRN from URL
+  const [miscDetails, setMiscDetails] = useState({
+    emailAddress: '',
+    phoneNumber: '',
+    birthdate: '',
+    interests: '',
+    emergencyContactInfo: ''
   });
+
+  // Simulating data fetching on mount
+  useEffect(() => {
+    setMiscDetails({
+      emailAddress: 'student@example.com',
+      phoneNumber: '9876543210',
+      birthdate: '2000-01-01',
+      interests: 'Reading, Coding, Gaming',
+      emergencyContactInfo: 'John Doe, 9123456789'
+    });
+  }, [prn]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      certificate: file,
+    setMiscDetails({
+      ...miscDetails,
+      [name]: value
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Handle form submission, like saving data to the database
-    // Note: File uploads might need special handling on the backend
-  };
-
-  const printForm = () => {
-    // Creating a printable version of the form data
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>Print Form</title></head><body>');
-    printWindow.document.write('<h1>Form Data</h1>');
-    printWindow.document.write(`<p><strong>Hobbies:</strong> ${formData.hobbies}</p>`);
-    printWindow.document.write(`<p><strong>Favorite Subjects:</strong> ${formData.favoriteSubjects}</p>`);
-    printWindow.document.write(`<p><strong>Preferred Learning Method:</strong> ${formData.preferredLearningMethod}</p>`);
-    printWindow.document.write(`<p><strong>Other Comments:</strong> ${formData.otherComments}</p>`);
-    printWindow.document.write(`<p><strong>Interests:</strong> ${formData.interests}</p>`);
-    printWindow.document.write(`<p><strong>Preferred Study Environment:</strong> ${formData.preferredStudyEnvironment}</p>`);
-    printWindow.document.write(`<p><strong>Extracurricular Activities:</strong> ${formData.extracurricularActivities}</p>`);
-    printWindow.document.write(`<p><strong>Favorite Books:</strong> ${formData.favoriteBooks}</p>`);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
+    // Here, you would submit the form data (e.g., to a backend)
+    console.log('Submitted:', miscDetails);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="misc-details-form">
+    <form onSubmit={handleSubmit} className="form-details-form">
       <h2>Miscellaneous Details</h2>
 
-      <label>
-        Hobbies:
-        <textarea
-          name="hobbies"
-          value={formData.hobbies}
-          onChange={handleChange}
-          placeholder="eg. Painting, Doodling"
-          required
-          className="large-textarea"
-        />
-      </label>
+      {/* Email Address */}
+      <div className="form-row">
+        <label>
+          Email Address:
+          <input
+            type="email"
+            name="emailAddress"
+            value={miscDetails.emailAddress}
+            onChange={handleChange}
+            required
+          />
+        </label>
+      </div>
 
-      <label>
-        Favorite Subjects:
-        <input
-          type="text"
-          name="favoriteSubjects"
-          value={formData.favoriteSubjects}
-          onChange={handleChange}
-          placeholder="eg. Mathematics, Quantum Physics"
-          required
-        />
-      </label>
+      {/* Phone Number */}
+      <div className="form-row">
+        <label>
+          Phone Number:
+          <input
+            type="tel"
+            name="phoneNumber"
+            value={miscDetails.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+        </label>
+      </div>
 
-      <label>
-        Preferred Learning Method:
-        <input
-          type="text"
-          name="preferredLearningMethod"
-          value={formData.preferredLearningMethod}
-          onChange={handleChange}
-          placeholder="e.g., Visual, Auditory, Kinesthetic"
-          required
-        />
-      </label>
+      {/* Birthdate */}
+      <div className="form-row">
+        <label>
+          Birthdate:
+          <input
+            type="date"
+            name="birthdate"
+            value={miscDetails.birthdate}
+            onChange={handleChange}
+            required
+          />
+        </label>
+      </div>
 
-      <label>
-        Other Comments:
-        <textarea
-          name="otherComments"
-          value={formData.otherComments}
-          onChange={handleChange}
-          placeholder="Any additional comments or information"
-          required
-        />
-      </label>
+      {/* Interests */}
+      <div className="form-row">
+        <label>
+          Interests:
+          <textarea
+            name="interests"
+            value={miscDetails.interests}
+            onChange={handleChange}
+            required
+          />
+        </label>
+      </div>
 
-      <label>
-        Interests:
-        <input
-          type="text"
-          name="interests"
-          value={formData.interests}
-          onChange={handleChange}
-          placeholder="eg. "
-          required
-        />
-      </label>
-      
-      <label>
-        Preferred Study Environment:
-        <input
-          type="text"
-          name="preferredStudyEnvironment"
-          value={formData.preferredStudyEnvironment}
-          onChange={handleChange}
-          placeholder="e.g., Quiet, Group Study, Library"
-          required
-        />
-      </label>
+      {/* Emergency Contact Info */}
+      <div className="form-row">
+        <label>
+          Emergency Contact Info:
+          <input
+            type="text"
+            name="emergencyContactInfo"
+            value={miscDetails.emergencyContactInfo}
+            onChange={handleChange}
+            required
+          />
+        </label>
+      </div>
 
-      <label>
-        Extracurricular Activities/Achievements:
-        <input
-          type="text"
-          name="extracurricularActivities"
-          value={formData.extracurricularActivities}
-          onChange={handleChange}
-          placeholder="eg. Hackathons, Cognition"
-          required
-        />
-      </label>
-
-      <label>
-        Upload Achievements Certificate:
-        <input
-          type="file"
-          name="certificate"
-          accept=".pdf"  /* Restrict file upload to PDF only */
-          onChange={handleFileChange}
-          required
-        />
-      </label>
-
-      <label>
-        Favorite Books:
-        <input
-          type="text"
-          name="favoriteBooks"
-          value={formData.favoriteBooks}
-          onChange={handleChange}
-          placeholder="List your favorite books"
-          required
-        />
-      </label>
-
-      <button type="submit">Submit</button>
-      <button type="button" onClick={printForm}>Print</button>
+      <button type="submit">Save Details</button>
     </form>
   );
 };

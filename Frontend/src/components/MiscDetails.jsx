@@ -12,16 +12,7 @@ const MiscDetails = () => {
     emergencyContactInfo: ''
   });
 
-  // Simulating data fetching on mount
-  useEffect(() => {
-    setMiscDetails({
-      emailAddress: 'student@example.com',
-      phoneNumber: '9876543210',
-      birthdate: '2000-01-01',
-      interests: 'Reading, Coding, Gaming',
-      emergencyContactInfo: 'John Doe, 9123456789'
-    });
-  }, [prn]);
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;

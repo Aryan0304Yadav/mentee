@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { BiHome, BiUser, BiBook, BiGridAlt, BiCog } from "react-icons/bi";
+import { BiHome, BiUser, BiBook, BiGridAlt, BiCog, BiChevronDown } from "react-icons/bi"; // Added BiChevronDown for the downward arrow
 import "../styles/sidebar.css";
 
 const Sidebar = ({ prn }) => {
@@ -36,24 +36,24 @@ const Sidebar = ({ prn }) => {
           >
             <BiUser className="icon" />
             User Information
+            <BiChevronDown className="dropdown-icon" /> {/* Downward arrow added */}
           </div>
           {activeDropdown === "userInfo" && (
             <div className="dropdown-menu">
               <Link
-  to={`/personal-details/${prn}`}
-  className={`item ${location.pathname === `/personal-details/${prn}` ? "active" : ""}`}
->
-  <BiUser className="icon" />
-  Personal Details
-</Link>
-<Link
-  to={`/residential-details/${prn}`}
-  className={`item ${location.pathname === `/residential-details/${prn}` ? "active" : ""}`}
->
-  <BiHome className="icon" />
-  Residential Details
-</Link>
-
+                to={`/personal-details/${prn}`}
+                className={`item ${location.pathname === `/personal-details/${prn}` ? "active" : ""}`}
+              >
+                <BiUser className="icon" />
+                Personal Details
+              </Link>
+              <Link
+                to={`/residential-details/${prn}`}
+                className={`item ${location.pathname === `/residential-details/${prn}` ? "active" : ""}`}
+              >
+                <BiHome className="icon" />
+                Residential Details
+              </Link>
             </div>
           )}
         </div>
@@ -66,6 +66,7 @@ const Sidebar = ({ prn }) => {
           >
             <BiBook className="icon" />
             Academic Details
+            <BiChevronDown className="dropdown-icon" /> {/* Downward arrow added */}
           </div>
           {activeDropdown === "academic" && (
             <div className="dropdown-menu">

@@ -52,5 +52,3 @@ Mentee data, including academic records and personal details, is stored in a MyS
 - **One-on-One Chat:** Implementing a chat feature for mentees to directly communicate with their mentors.
 - **Chatbot Integration:** Adding an AI-based chatbot to assist mentees in navigating the dashboard and submitting forms.
 - **Enhanced Notifications:** Real-time updates and notifications when the mentor verifies any form changes.
-
-

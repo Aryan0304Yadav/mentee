@@ -9,7 +9,7 @@ import AcademicDetails from './components/AcademicDetails';
 import ResidentialDetails from './components/ResidentialDetails';
 import PreAdmissionAcademicDetails from './components/PreAdmissionAcademicDetails';
 import PostAdmissionAcademicDetails from './components/PostAdmissionAcademicDetails'; // Updated import
-import Observations from './components/Observations'; // Ensure the Observations component exists
+import Observations from './components/MentorObservation'; // Ensure the Observations component exists
 import ParentDetails from './components/ParentDetails'; // Import the new ParentDetails component
 import './App.css';
 

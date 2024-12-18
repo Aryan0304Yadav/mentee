@@ -46,7 +46,7 @@ const Sidebar = ({ prn }) => {
                 Personal Details
               </Link>
               <Link
-                to={`/parent-details/${prn}`} 
+                to={`/parent-details/${prn}`}
                 className={`item ${location.pathname === `/parent-details/${prn}` ? "active" : ""}`}
               >
                 <BiUser className="icon" />
@@ -101,8 +101,8 @@ const Sidebar = ({ prn }) => {
         </Link>
 
         <Link
-          to={`/observations-from-mentors/${prn}`}
-          className={`item ${location.pathname === `/observations-from-mentors/${prn}` ? "active" : ""}`}
+          to={`/observations/${prn}`}
+          className={`item ${location.pathname === `/observations/${prn}` ? "active" : ""}`}
         >
           <BiCog className="icon" />
           Observations from Mentors

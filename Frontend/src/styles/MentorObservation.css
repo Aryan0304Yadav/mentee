@@ -1,0 +1,29 @@
+.mentor-observations-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 24px;
+  padding: 24px;
+
+}
+
+.mentor-observation-card {
+  background-color: #ecf1f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mentor-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #27374d;
+}
+
+.observation-content {
+  flex-grow: 1;
+  white-space: wrap;
+  color: #526d82;
+}

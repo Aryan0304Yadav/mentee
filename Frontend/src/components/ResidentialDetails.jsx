@@ -1,39 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom"; // Import useParams hook
-
-import "../styles/ResidentialDetails.css"; // CSS for residential details
+import { useParams } from "react-router-dom";
+import "../styles/ResidentialDetails.css"; // Your CSS for the page
 
 const ResidentialDetails = () => {
-  const { prn } = useParams(); // Get PRN from URL parameters
+  const { prn } = useParams();
   const [formData, setFormData] = useState({
-    address: "",
-    city: "",
-    state: "",
-    postal_code: "",
-    permanent_address: "",
-    hostel_number: "", // Added field for hostel number
+    currentLivingWith: "",
+    currentAddress: "",
+    permanentAddress: "",
+    stateOfResidence: "",
+    areaOfResidence: "",
   });
+  const [isEditable, setIsEditable] = useState(false); // Tracks if form fields are editable
 
-  const [isPermanentAddressSame, setIsPermanentAddressSame] = useState(true); // State to track if permanent address is same as residential address
-
-  // List of all states in India, with Maharashtra at the top
-  const states = [
-    "Maharashtra", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
-    "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Manipur", "Meghalaya",
-    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
-    "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu",
-    "Lakshadweep", "Delhi", "Puducherry"
-  ];
-
-  // Fetch student residential details based on prn
   useEffect(() => {
     const fetchResidentialData = async () => {
       try {
-        const response = await axios.get(`https://mentor-mentee-backend.vercel.app/residential-details/${prn}`);
-        const residentialData = response.data;
-
-        setFormData(residentialData); // Pre-fill form with fetched data
+        const response = await axios.get(
+          `https://mentor-mentee-backend.vercel.app/residential-details/${prn}`
+        );
+        setFormData(response.data);
       } catch (error) {
         console.error("Error fetching residential details:", error);
       }
@@ -49,17 +36,17 @@ const ResidentialDetails = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handlePermanentAddressSameChange = (e) => {
-    setIsPermanentAddressSame(e.target.value === "yes");
-    if (e.target.value === "yes") {
-      setFormData({ ...formData, permanent_address: "" }); // Clear permanent address if yes is selected
-    }
+  const handleEdit = () => {
+    setIsEditable(true); // Make fields editable
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSaveChanges = async () => {
+    setIsEditable(false); // Disable editing
     try {
-      await axios.put(`https://mentor-mentee-backend.vercel.app/residential-details/${prn}`, formData);
+      await axios.put(
+        `https://mentor-mentee-backend.vercel.app/residential-details/${prn}`,
+        formData
+      );
       alert("Residential details updated successfully");
     } catch (error) {
       console.error("Error updating residential details:", error);
@@ -67,124 +54,93 @@ const ResidentialDetails = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-details-form">
-      <h2>Residential Details</h2> {/* Formal title */}
+    <form className="form-details-form">
+      <h2>Residential Details</h2>
 
-      {/* Residential Address */}
-      <div className="form-row">
-        <label>
-          Residential Address:
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-
-      {/* City */}
-      <div className="form-row">
-        <label>
-          City:
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-
-      {/* State */}
-      <div className="form-row">
-        <label>
-          State:
-          <select
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          >
-            {states.map((state, index) => (
-              <option key={index} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      {/* Postal Code */}
-      <div className="form-row">
-        <label>
-          Postal Code (Pincode):
-          <input
-            type="text"
-            name="postal_code"
-            value={formData.postal_code}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-
-      {/* Question: Is your permanent address same as residential address? */}
-      <div className="form-row">
-        <label>
-          Is your permanent address the same as your residential address?
-        </label>
-        <div className="yes-no-buttons">
-          <button
-            type="button"
-            className={isPermanentAddressSame ? "selected" : ""}
-            onClick={handlePermanentAddressSameChange}
-            value="yes"
-          >
-            Yes
-          </button>
-          <button
-            type="button"
-            className={!isPermanentAddressSame ? "selected" : ""}
-            onClick={handlePermanentAddressSameChange}
-            value="no"
-          >
-            No
-          </button>
-        </div>
-      </div>
-
-      {/* If 'No' is selected, show the permanent address field */}
-      {!isPermanentAddressSame && (
+      <div className="editable-section">
+        <h3>Editable Information</h3>
         <div className="form-row">
+          <label>
+            Currently Living With:
+            <select
+              name="currentLivingWith"
+              value={formData.currentLivingWith}
+              onChange={handleChange}
+              disabled={!isEditable}
+              required
+            >
+              <option value="">Select...</option>
+              <option value="Parent">Parent</option>
+              <option value="Guardian">Guardian</option>
+              <option value="Relative">Relative</option>
+              <option value="Friend">Friend</option>
+              <option value="Hostel">Hostel</option>
+            </select>
+          </label>
+
+          <label>
+            Current Address:
+            <input
+              type="text"
+              name="currentAddress"
+              value={formData.currentAddress}
+              onChange={handleChange}
+              disabled={!isEditable}
+              required
+            />
+          </label>
+
           <label>
             Permanent Address:
             <input
               type="text"
-              name="permanent_address"
-              value={formData.permanent_address}
+              name="permanentAddress"
+              value={formData.permanentAddress}
               onChange={handleChange}
+              disabled={!isEditable}
+            />
+          </label>
+
+          <label>
+            State Of Residence:
+            <input
+              type="text"
+              name="stateOfResidence"
+              value={formData.stateOfResidence}
+              onChange={handleChange}
+              disabled={!isEditable}
+              required
+            />
+          </label>
+
+          <label>
+            Area Of Residence:
+            <input
+              type="text"
+              name="areaOfResidence"
+              value={formData.areaOfResidence}
+              onChange={handleChange}
+              disabled={!isEditable}
+              required
             />
           </label>
         </div>
-      )}
 
-      {/* Hostel Number */}
-      <div className="form-row">
-        <label>
-          Hostel Number (if applicable):
-          <input
-            type="text"
-            name="hostel_number"
-            value={formData.hostel_number}
-            onChange={handleChange}
-          />
-        </label>
+        {!isEditable ? (
+          <button type="button" onClick={handleEdit}>
+            Edit
+          </button>
+        ) : (
+          <button type="button" onClick={handleSaveChanges}>
+            Save Changes
+          </button>
+        )}
       </div>
 
-      <button type="submit">Save Changes</button> {/* Clear CTA */}
+      <div className="non-editable-section">
+        <h3>Non-Editable Information</h3>
+        {/* Add any fields that are non-editable here */}
+      </div>
     </form>
   );
 };

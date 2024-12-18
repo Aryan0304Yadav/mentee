@@ -1,107 +1,111 @@
-.form-details-form {
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-  }
-  
-  .form-details-form h2 {
-    color: #526d82;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .form-details-form .form-row {
-    font-weight: bold;
-    color: #4a5568;
-    display: flex;
-    gap: 20px; /* Space between the two fields */
-    margin-bottom: 20px; /* Space below each row */
-  }
-  
-  .form-details-form .form-row label {
-    flex: 1; /* Each label/input pair takes up equal space */
-    min-width: 0; /* Prevents overflow issues */
-  }
-  
-  .form-details-form input[type="text"],
-  .form-details-form input[type="email"],
-  .form-details-form input[type="tel"],
-  .form-details-form input[type="file"],
-  .form-details-form input[type="date"],
-  .form-details-form select,
-  .form-details-form textarea {
-    width: 100%; /* Full width of its parent (the label) */
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #dde6ed;
-    box-sizing: border-box;
-    background: #dde6ed;
-    color: #526d82;
-    outline: none;
-    transition: border-color 0.2s ease-in-out;
-  }
-  
-  .form-details-form input[type="text"]:focus,
-  .form-details-form input[type="email"]:focus,
-  .form-details-form input[type="tel"]:focus,
-  .form-details-form input[type="file"]:focus,
-  .form-details-form input[type="date"]:focus,
-  .form-details-form select:focus,
-  .form-details-form textarea:focus {
-    border-color: #526d82;
-  }
-  
-  .form-details-form textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-  
-  .form-details-form button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #526d82;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .form-details-form button[type="submit"]:hover {
-    background-color: #145090;
-  }
-  
+/* General container styling */
+.editable-section, .non-editable-section {
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  /*
-  buttons ki styling
-  */
-  .yes-no-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-  }
-  
-  .yes-no-buttons button {
-    padding: 10px 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .yes-no-buttons button.selected {
-    background-color: #526d82;
-    color: #fff;
-  }
-  
-  .yes-no-buttons button:hover {
-    background-color: #dde6ed;
-  }
-  
+.editable-section h3, .non-editable-section h3 {
+  color: #526d82;
+  margin-bottom: 15px;
+}
+
+/* Form-row improvements */
+.form-row {
+  display: flex;
+  flex-direction: column; /* Stacks the inputs vertically */
+  gap: 15px; /* Space between the label/input pairs */
+  margin-bottom: 20px; /* Space below each row */
+}
+
+.form-row label {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 5px; /* Space between label and input */
+}
+
+/* Styling inputs and selects in editable section */
+.editable-section input,
+.editable-section select,
+.non-editable-section input,
+.non-editable-section select,
+.non-editable-section textarea {
+  background-color: #dde6ed;
+  color: #526d82;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px 10px; /* Increased padding for breathing space */
+  font-size: 1rem;
+  margin-top: 5px; /* Space between label and input */
+}
+
+textarea {
+  resize: vertical; /* Allow vertical resize for textareas */
+  min-height: 80px;
+}
+
+/* Read-only input styles */
+.editable-section input[readOnly] {
+  background-color: #f0f0f0;
+}
+
+/* Focus and hover effect */
+.editable-section input:focus,
+.editable-section select:focus,
+.editable-section textarea:focus {
+  outline: none;
+  border-color: #145090;
+  box-shadow: 0 0 5px rgba(20, 80, 144, 0.3);
+}
+
+/* Button styles */
+button {
+  padding: 10px 20px;
+  background-color: #526d82;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #145090;
+}
+
+/* Edit button specific styles */
+button[type="button"] {
+  margin-right: 10px;
+  background-color: #526d82; /* Same blue as "Save Changes" button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button[type="button"]:hover {
+  background-color: #145090;
+}
+
+/* Save Changes button specific styles */
+button[type="submit"] {
+  background-color: #008CBA; /* Blue color for "Save Changes" */
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button[type="submit"]:hover {
+  background-color: #007bb5;
+}
+
+/* Improved spacing for form sections */
+.editable-section {
+  margin-bottom: 30px;
+}
+
+.non-editable-section {
+  margin-top: 10px;
+}

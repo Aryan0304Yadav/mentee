@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import "../styles/ResidentialDetails.css"; // Your CSS for the page
+import "../styles/ResidentialDetails.css"; 
 
 const ResidentialDetails = () => {
   const { prn } = useParams();
   const [formData, setFormData] = useState({
-    currentLivingWith: "",
-    currentAddress: "",
-    permanentAddress: "",
-    stateOfResidence: "",
-    areaOfResidence: "",
+    currently_living_with: "",
+    current_address: "",
+    permanent_address: "",
+    state_of_residence: "",
+    area_of_residence: "",
   });
-  const [isEditable, setIsEditable] = useState(false); // Tracks if form fields are editable
 
+  const [isEditable, setIsEditable] = useState(false); // State to toggle edit mode
+  const [showPopup, setShowPopup] = useState(false); // State to show confirmation popup
+  const [isSameAddress, setIsSameAddress] = useState(false); // State for Yes/No button for copying address
+
+  // Fetch student residential details based on prn
   useEffect(() => {
     const fetchResidentialData = async () => {
       try {
         const response = await axios.get(
           `https://mentor-mentee-backend.vercel.app/residential-details/${prn}`
         );
-        setFormData(response.data);
+        const residentialData = response.data;
+        setFormData(residentialData); // Pre-fill form with fetched data
       } catch (error) {
         console.error("Error fetching residential details:", error);
       }
@@ -36,12 +41,20 @@ const ResidentialDetails = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleEdit = () => {
-    setIsEditable(true); // Make fields editable
+  const handleYesNoChange = (answer) => {
+    setIsSameAddress(answer === "yes");
+    if (answer === "yes") {
+      setFormData({
+        ...formData,
+        permanent_address: formData.current_address,
+      });
+    }
   };
 
-  const handleSaveChanges = async () => {
-    setIsEditable(false); // Disable editing
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setShowPopup(true); // Show popup before submitting
+
     try {
       await axios.put(
         `https://mentor-mentee-backend.vercel.app/residential-details/${prn}`,
@@ -53,23 +66,32 @@ const ResidentialDetails = () => {
     }
   };
 
+  const handleEdit = () => {
+    setIsEditable(true); // Enable editing
+  };
+
+  const handleSaveChanges = () => {
+    setIsEditable(false); // Disable editing
+    alert("Changes saved successfully!");
+  };
+
   return (
-    <form className="form-details-form">
+    <form onSubmit={handleSubmit} className="form-details-form">
       <h2>Residential Details</h2>
 
+      {/* Editable Fields Section */}
       <div className="editable-section">
         <h3>Editable Information</h3>
         <div className="form-row">
           <label>
             Currently Living With:
             <select
-              name="currentLivingWith"
-              value={formData.currentLivingWith}
+              name="currently_living_with"
+              value={formData.currently_living_with}
               onChange={handleChange}
               disabled={!isEditable}
               required
             >
-              <option value="">Select...</option>
               <option value="Parent">Parent</option>
               <option value="Guardian">Guardian</option>
               <option value="Relative">Relative</option>
@@ -79,48 +101,68 @@ const ResidentialDetails = () => {
           </label>
 
           <label>
-            Current Address:
+            Current/Correspondence Address:
             <input
               type="text"
-              name="currentAddress"
-              value={formData.currentAddress}
+              name="current_address"
+              value={formData.current_address}
               onChange={handleChange}
-              disabled={!isEditable}
+              readOnly={!isEditable}
               required
             />
           </label>
+
+          {/* Yes/No Button for Permanent Address */}
+          <div className="yes-no-buttons">
+            <label>Is the permanent address same as current?</label>
+            <button
+              type="button"
+              onClick={() => handleYesNoChange("yes")}
+              className={isSameAddress ? "selected" : ""}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => handleYesNoChange("no")}
+              className={!isSameAddress ? "selected" : ""}
+            >
+              No
+            </button>
+          </div>
 
           <label>
             Permanent Address:
             <input
               type="text"
-              name="permanentAddress"
-              value={formData.permanentAddress}
+              name="permanent_address"
+              value={formData.permanent_address}
               onChange={handleChange}
-              disabled={!isEditable}
-            />
-          </label>
-
-          <label>
-            State Of Residence:
-            <input
-              type="text"
-              name="stateOfResidence"
-              value={formData.stateOfResidence}
-              onChange={handleChange}
-              disabled={!isEditable}
+              readOnly={!isEditable}
               required
             />
           </label>
 
           <label>
-            Area Of Residence:
+            State of Residence:
             <input
               type="text"
-              name="areaOfResidence"
-              value={formData.areaOfResidence}
+              name="state_of_residence"
+              value={formData.state_of_residence}
               onChange={handleChange}
-              disabled={!isEditable}
+              readOnly={!isEditable}
+              required
+            />
+          </label>
+
+          <label>
+            Area of Residence:
+            <input
+              type="text"
+              name="area_of_residence"
+              value={formData.area_of_residence}
+              onChange={handleChange}
+              readOnly={!isEditable}
               required
             />
           </label>
@@ -137,10 +179,17 @@ const ResidentialDetails = () => {
         )}
       </div>
 
-      <div className="non-editable-section">
-        <h3>Non-Editable Information</h3>
-        {/* Add any fields that are non-editable here */}
-      </div>
+      {/* Pop-up Confirmation */}
+      {showPopup && (
+        <div className="popup">
+          <p>Submitting Changes for Approval</p>
+          <button type="button" onClick={() => setShowPopup(false)}>
+            Close
+          </button>
+        </div>
+      )}
+
+      <button type="submit">Submit</button>
     </form>
   );
 };

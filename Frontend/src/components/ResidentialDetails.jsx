@@ -7,15 +7,33 @@ const ResidentialDetails = () => {
   const { prn } = useParams();
   const [formData, setFormData] = useState({
     currently_living_with: "",
-    current_address: "",
-    permanent_address: "",
-    state_of_residence: "",
+    current_address_line_1: "",
+    current_address_line_2: "",
+    current_address_pincode: "",
+    permanent_address_line_1: "",
+    permanent_address_line_2: "",
+    permanent_address_pincode: "",
+    state_of_residence: "Maharashtra", // Default to Maharashtra
     area_of_residence: "",
   });
 
   const [isEditable, setIsEditable] = useState(false); // State to toggle edit mode
   const [showPopup, setShowPopup] = useState(false); // State to show confirmation popup
   const [isSameAddress, setIsSameAddress] = useState(false); // State for Yes/No button for copying address
+  const [formErrors, setFormErrors] = useState({}); // To track form validation errors
+  const [isFormValid, setIsFormValid] = useState(true); // Track if the form is valid for submission
+
+  // List of all states in India
+  const states = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", 
+    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", 
+    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", 
+    "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
+    "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep", 
+    "Delhi", "Puducherry"
+  ];
 
   // Fetch student residential details based on prn
   useEffect(() => {
@@ -39,6 +57,12 @@ const ResidentialDetails = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Clear error when user changes the input
+    if (name.includes("pincode")) {
+      setFormErrors({ ...formErrors, [name]: "" });
+      validateForm();
+    }
   };
 
   const handleYesNoChange = (answer) => {
@@ -46,13 +70,48 @@ const ResidentialDetails = () => {
     if (answer === "yes") {
       setFormData({
         ...formData,
-        permanent_address: formData.current_address,
+        permanent_address_line_1: formData.current_address_line_1,
+        permanent_address_line_2: formData.current_address_line_2,
+        permanent_address_pincode: formData.current_address_pincode,
       });
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Check if PINCODE is valid
+    if (!/^\d{6}$/.test(formData.current_address_pincode)) {
+      errors.current_address_pincode = "Current Pincode must be a 6-digit number.";
+    }
+
+    if (!/^\d{6}$/.test(formData.permanent_address_pincode)) {
+      errors.permanent_address_pincode = "Permanent Pincode must be a 6-digit number.";
+    }
+
+    // Check if any required field is empty
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] === "" && key !== "state_of_residence") {
+        errors[key] = `${key.replace(/_/g, " ")} is required`;
+      }
+    });
+
+    // If errors exist, set isFormValid to false, else true
+    if (Object.keys(errors).length > 0) {
+      setIsFormValid(false);
+      setFormErrors(errors);
+    } else {
+      setIsFormValid(true);
+      setFormErrors({});
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // If form is invalid, don't submit
+    if (!isFormValid) return;
+
     setShowPopup(true); // Show popup before submitting
 
     try {
@@ -100,16 +159,46 @@ const ResidentialDetails = () => {
             </select>
           </label>
 
+          {/* Current Address - 3 separate input fields */}
           <label>
-            Current/Correspondence Address:
+            Current Address Line 1:
             <input
               type="text"
-              name="current_address"
-              value={formData.current_address}
+              name="current_address_line_1"
+              value={formData.current_address_line_1}
               onChange={handleChange}
               readOnly={!isEditable}
               required
             />
+          </label>
+
+          <label>
+            Current Address Line 2:
+            <input
+              type="text"
+              name="current_address_line_2"
+              value={formData.current_address_line_2}
+              onChange={handleChange}
+              readOnly={!isEditable}
+              required
+            />
+          </label>
+
+          <label>
+            Current Pincode:
+            <input
+              type="text"
+              name="current_address_pincode"
+              value={formData.current_address_pincode}
+              onChange={handleChange}
+              readOnly={!isEditable}
+              required
+              pattern="\d{6}" // Ensure it's exactly 6 digits
+              title="Pincode must be 6 digits"
+            />
+            {formErrors.current_address_pincode && (
+              <span className="error">{formErrors.current_address_pincode}</span>
+            )}
           </label>
 
           {/* Yes/No Button for Permanent Address */}
@@ -131,12 +220,13 @@ const ResidentialDetails = () => {
             </button>
           </div>
 
+          {/* Permanent Address - 3 separate input fields */}
           <label>
-            Permanent Address:
+            Permanent Address Line 1:
             <input
               type="text"
-              name="permanent_address"
-              value={formData.permanent_address}
+              name="permanent_address_line_1"
+              value={formData.permanent_address_line_1}
               onChange={handleChange}
               readOnly={!isEditable}
               required
@@ -144,15 +234,49 @@ const ResidentialDetails = () => {
           </label>
 
           <label>
-            State of Residence:
+            Permanent Address Line 2:
             <input
               type="text"
-              name="state_of_residence"
-              value={formData.state_of_residence}
+              name="permanent_address_line_2"
+              value={formData.permanent_address_line_2}
               onChange={handleChange}
               readOnly={!isEditable}
               required
             />
+          </label>
+
+          <label>
+            Permanent Pincode:
+            <input
+              type="text"
+              name="permanent_address_pincode"
+              value={formData.permanent_address_pincode}
+              onChange={handleChange}
+              readOnly={!isEditable}
+              required
+              pattern="\d{6}" // Ensure it's exactly 6 digits
+              title="Pincode must be 6 digits"
+            />
+            {formErrors.permanent_address_pincode && (
+              <span className="error">{formErrors.permanent_address_pincode}</span>
+            )}
+          </label>
+
+          <label>
+            State of Residence:
+            <select
+              name="state_of_residence"
+              value={formData.state_of_residence}
+              onChange={handleChange}
+              disabled={!isEditable}
+              required
+            >
+              {states.map((state, index) => (
+                <option key={index} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label>
@@ -173,7 +297,7 @@ const ResidentialDetails = () => {
             Edit
           </button>
         ) : (
-          <button type="button" onClick={handleSaveChanges}>
+          <button type="button" onClick={handleSaveChanges} disabled={!isFormValid}>
             Save Changes
           </button>
         )}
@@ -189,7 +313,7 @@ const ResidentialDetails = () => {
         </div>
       )}
 
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={!isFormValid}>Submit</button>
     </form>
   );
 };

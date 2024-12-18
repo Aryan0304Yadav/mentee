@@ -59,29 +59,29 @@
     background-color: #145090;
   }
   
-  /* Yes/No button styling */
-  .yes-no-buttons {
-    display: inline-flex;  /* Use inline-flex to keep buttons inline */
-    gap: 10px;  /* Space between buttons */
-    justify-content: flex-start;
-    align-items: center;
-  }
-  
-  .yes-no-buttons button {
-    padding: 10px 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .yes-no-buttons button.selected {
-    background-color: #526d82;
-    color: #fff;
-  }
-  
-  .yes-no-buttons button:hover {
-    background-color: #dde6ed;
-  }
-  
+/* Yes/No button styling */
+.yes-no-buttons {
+  display: inline-flex;  /* Use inline-flex to keep buttons inline */
+  gap: 10px;  /* Space between buttons */
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.yes-no-buttons button {
+  padding: 10px 20px;
+  background-color: #f0f0f0;  /* Default background color */
+  color: #000;  /* Text color set to black */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.yes-no-buttons button.selected {
+  background-color: #526d82;
+  color: #fff;
+}
+
+.yes-no-buttons button:hover {
+  background-color: #dde6ed;  /* Light background on hover */
+}

@@ -5,10 +5,10 @@ import "../styles/sidebar.css";
 
 const Sidebar = ({ prn }) => {
   const location = useLocation();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // Track active dropdown
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const toggleDropdown = (dropdownId) => {
+    setActiveDropdown(prevState => (prevState === dropdownId ? null : dropdownId)); // Toggle or close the dropdown
   };
 
   return (
@@ -28,41 +28,64 @@ const Sidebar = ({ prn }) => {
           Dashboard
         </Link>
 
-        {/* Personal Details Link */}
-        <Link
-          to={`/personal-details/${prn}`}
-          className={`item ${location.pathname === `/personal-details/${prn}` ? "active" : ""}`}
-        >
-          <BiUser className="icon" />
-          Personal Details
-        </Link>
+        {/* User Information Dropdown */}
+        <div className="dropdown">
+          <div
+            className={`item dropdown-header ${activeDropdown === "userInfo" ? "active" : ""}`}
+            onClick={() => toggleDropdown("userInfo")}
+          >
+            <BiUser className="icon" />
+            User Information
+          </div>
+          {activeDropdown === "userInfo" && (
+            <div className="dropdown-menu">
+              <Link
+  to={`/personal-details/${prn}`}
+  className={`item ${location.pathname === `/personal-details/${prn}` ? "active" : ""}`}
+>
+  <BiUser className="icon" />
+  Personal Details
+</Link>
+<Link
+  to={`/residential-details/${prn}`}
+  className={`item ${location.pathname === `/residential-details/${prn}` ? "active" : ""}`}
+>
+  <BiHome className="icon" />
+  Residential Details
+</Link>
 
-        {/* Residential Details Link */}
-        <Link
-          to={`/residential-details/${prn}`}
-          className={`item ${location.pathname === `/residential-details/${prn}` ? "active" : ""}`}
-        >
-          <BiHome className="icon" />
-          Residential Details
-        </Link>
+            </div>
+          )}
+        </div>
 
-        {/* Pre-admission Academic Details Link */}
-        <Link
-          to={`/pre-admission-academic-details/${prn}`}
-          className={`item ${location.pathname === `/pre-admission-academic-details/${prn}` ? "active" : ""}`}
-        >
-          <BiBook className="icon" />
-          Pre-admission Academic Details
-        </Link>
-
-        {/* Post-admission Academic Details Link */}
-        <Link
-          to={`/post-admission-academic-details/${prn}`}
-          className={`item ${location.pathname === `/post-admission-academic-details/${prn}` ? "active" : ""}`}
-        >
-          <BiBook className="icon" />
-          Post-admission Academic Details
-        </Link>
+        {/* Academic Details Dropdown */}
+        <div className="dropdown">
+          <div
+            className={`item dropdown-header ${activeDropdown === "academic" ? "active" : ""}`}
+            onClick={() => toggleDropdown("academic")}
+          >
+            <BiBook className="icon" />
+            Academic Details
+          </div>
+          {activeDropdown === "academic" && (
+            <div className="dropdown-menu">
+              <Link
+                to={`/pre-admission-academic-details/${prn}`}
+                className={`item ${location.pathname === `/pre-admission-academic-details/${prn}` ? "active" : ""}`}
+              >
+                <BiBook className="icon" />
+                Pre-admission Academic Details
+              </Link>
+              <Link
+                to={`/post-admission-academic-details/${prn}`}
+                className={`item ${location.pathname === `/post-admission-academic-details/${prn}` ? "active" : ""}`}
+              >
+                <BiBook className="icon" />
+                Post-admission Academic Details
+              </Link>
+            </div>
+          )}
+        </div>
 
         {/* Miscellaneous Details Link */}
         <Link

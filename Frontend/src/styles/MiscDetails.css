@@ -1,4 +1,75 @@
-.form-details-form {
+/* Achievements.css */
+.achievements-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+h2 {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  margin-top: 20px;
+  text-align: left; /* Align headings to the left */
+}
+
+.achievement-item {
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.achievement-item label {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.achievement-item input {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.achievement-item input[type="file"] {
+  padding: 4px;
+}
+
+/* Button styling */
+button {
+  padding: 6px 12px; /* Reduced size */
+  background-color: #808080; /* Gray color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem; /* Smaller font size */
+  cursor: pointer;
+  margin-top: 15px;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #6c6c6c; /* Slightly darker gray on hover */
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* MiscDetails Form Styling */
+.parent {
+  width: 100%;
+}
+
+.misc-details-form {
   width: 100%;
   margin: 0 auto;
   padding: 20px;
@@ -8,55 +79,66 @@
   box-sizing: border-box;
 }
 
-.form-details-form h2 {
+.misc-details-form h2 {
   color: #526d82;
   margin-bottom: 20px;
   text-align: center;
 }
 
-.form-details-form .form-row {
+.misc-details-form label {
+  display: block;
+  margin-bottom: 15px;
   font-weight: bold;
   color: #4a5568;
-  display: flex;
-  gap: 20px; /* Space between the two fields */
-  margin-bottom: 20px; /* Space below each row */
 }
 
-.form-details-form .form-row label {
-  flex: 1; /* Each label/input pair takes up equal space */
-  min-width: 0; /* Prevents overflow issues */
-}
-
-.form-details-form input[type="text"],
-.form-details-form input[type="email"],
-.form-details-form input[type="tel"],
-.form-details-form input[type="date"],
-.form-details-form textarea {
-  width: 100%; /* Full width of its parent (the label) */
+.misc-details-form input[type="text"],
+.misc-details-form textarea {
+  width: 100%;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #dde6ed;
-  box-sizing: border-box;
   background: #dde6ed;
   color: #526d82;
   outline: none;
+  box-sizing: border-box;
   transition: border-color 0.2s ease-in-out;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.form-details-form input[type="text"]:focus,
-.form-details-form input[type="email"]:focus,
-.form-details-form input[type="tel"]:focus,
-.form-details-form input[type="date"]:focus,
-.form-details-form textarea:focus {
+.misc-details-form input[type="text"]:focus,
+.misc-details-form textarea:focus {
   border-color: #526d82;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.form-details-form textarea {
+.misc-details-form textarea {
   resize: vertical;
   min-height: 100px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.form-details-form button[type="submit"] {
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.buttons button {
+  width: 100%;
   padding: 10px 20px;
   background-color: #526d82;
   color: #fff;
@@ -64,11 +146,29 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
+  display: inline-block;
 }
 
-.form-details-form button[type="submit"]:hover {
+.buttons button:hover {
   background-color: #145090;
+}
+
+.buttons button:disabled {
+  background-color: #dde6ed;
+  cursor: not-allowed;
+}
+
+
+
+input, textarea {
+  color: #333; /* Dark color for text */
+  font-weight: 600; /* Semibold */
+  
+}
+
+
+.misc-details-form input,
+.misc-details-form textarea {
+  color: #526d82;
+  font-weight: 600; 
 }

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { BiHome, BiUser, BiBook, BiGridAlt, BiCog, BiChevronDown } from "react-icons/bi"; // Added BiChevronDown for the downward arrow
+import { BiHome, BiUser, BiBook, BiGridAlt, BiCog, BiChevronDown } from "react-icons/bi";
 import "../styles/sidebar.css";
 
 const Sidebar = ({ prn }) => {
   const location = useLocation();
-  const [activeDropdown, setActiveDropdown] = useState(null); // Track active dropdown
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   const toggleDropdown = (dropdownId) => {
-    setActiveDropdown(prevState => (prevState === dropdownId ? null : dropdownId)); // Toggle or close the dropdown
+    setActiveDropdown((prevState) => (prevState === dropdownId ? null : dropdownId));
   };
 
   return (
@@ -19,7 +19,6 @@ const Sidebar = ({ prn }) => {
         </Link>
       </div>
       <div className="menu--list">
-        {/* Dashboard Link */}
         <Link
           to={`/dashboard/${prn}`}
           className={`item ${location.pathname === `/dashboard/${prn}` ? "active" : ""}`}
@@ -28,7 +27,6 @@ const Sidebar = ({ prn }) => {
           Dashboard
         </Link>
 
-        {/* User Information Dropdown */}
         <div className="dropdown">
           <div
             className={`item dropdown-header ${activeDropdown === "userInfo" ? "active" : ""}`}
@@ -36,7 +34,7 @@ const Sidebar = ({ prn }) => {
           >
             <BiUser className="icon" />
             User Information
-            <BiChevronDown className="dropdown-icon" /> {/* Downward arrow added */}
+            <BiChevronDown className="dropdown-icon" />
           </div>
           {activeDropdown === "userInfo" && (
             <div className="dropdown-menu">
@@ -46,6 +44,13 @@ const Sidebar = ({ prn }) => {
               >
                 <BiUser className="icon" />
                 Personal Details
+              </Link>
+              <Link
+                to={`/parent-details/${prn}`} 
+                className={`item ${location.pathname === `/parent-details/${prn}` ? "active" : ""}`}
+              >
+                <BiUser className="icon" />
+                Parent Details
               </Link>
               <Link
                 to={`/residential-details/${prn}`}
@@ -58,7 +63,6 @@ const Sidebar = ({ prn }) => {
           )}
         </div>
 
-        {/* Academic Details Dropdown */}
         <div className="dropdown">
           <div
             className={`item dropdown-header ${activeDropdown === "academic" ? "active" : ""}`}
@@ -66,7 +70,7 @@ const Sidebar = ({ prn }) => {
           >
             <BiBook className="icon" />
             Academic Details
-            <BiChevronDown className="dropdown-icon" /> {/* Downward arrow added */}
+            <BiChevronDown className="dropdown-icon" />
           </div>
           {activeDropdown === "academic" && (
             <div className="dropdown-menu">
@@ -88,7 +92,6 @@ const Sidebar = ({ prn }) => {
           )}
         </div>
 
-        {/* Miscellaneous Details Link */}
         <Link
           to={`/misc-details/${prn}`}
           className={`item ${location.pathname === `/misc-details/${prn}` ? "active" : ""}`}
@@ -97,7 +100,6 @@ const Sidebar = ({ prn }) => {
           Miscellaneous Details
         </Link>
 
-        {/* Observations Link */}
         <Link
           to={`/observations-from-mentors/${prn}`}
           className={`item ${location.pathname === `/observations-from-mentors/${prn}` ? "active" : ""}`}
@@ -106,7 +108,6 @@ const Sidebar = ({ prn }) => {
           Observations from Mentors
         </Link>
 
-        {/* Settings Link */}
         <Link
           to={`/settings/${prn}`}
           className={`item ${location.pathname === `/settings/${prn}` ? "active" : ""}`}

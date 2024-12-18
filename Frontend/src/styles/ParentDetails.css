@@ -1,0 +1,17 @@
+.parent-details {
+    padding: 20px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .parent-details h1 {
+    font-size: 24px;
+    color: #007BFF;
+  }
+  
+  .parent-details p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #555;
+  }
+  

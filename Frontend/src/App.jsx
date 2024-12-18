@@ -10,6 +10,7 @@ import ResidentialDetails from './components/ResidentialDetails';
 import PreAdmissionAcademicDetails from './components/PreAdmissionAcademicDetails';
 import PostAdmissionAcademicDetails from './components/PostAdmissionAcademicDetails'; // Updated import
 import Observations from './components/Observations'; // Ensure the Observations component exists
+import ParentDetails from './components/ParentDetails'; // Import the new ParentDetails component
 import './App.css';
 
 // Define the PRN constant
@@ -50,6 +51,10 @@ const App = () => {
 
             <Route path="/observations" element={<Observations />} />
             <Route path="/observations/:prn" element={<Observations />} />
+
+            {/* New Parent Details Route */}
+            <Route path="/parent-details" element={<ParentDetails />} />
+            <Route path="/parent-details/:prn" element={<ParentDetails />} />
           </Routes>
         </div>
       </div>

@@ -1,16 +1,220 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "../styles/ParentDetails.css"; // Optional if you want custom styling for this page
+import axios from "axios";
+import "../styles/ParentDetails.css";
 
 const ParentDetails = () => {
-  const { prn } = useParams(); // Retrieve PRN from URL
+  const { prn } = useParams(); // Capture 'prn' from the route
+  const [formData, setFormData] = useState({
+    father_name: "",
+    father_occupation: "",
+    father_mobile_number: "",
+    mother_name: "",
+    mother_occupation: "",
+    mother_mobile_number: "",
+    guardian_name: "",
+    guardian_occupation: "",
+    guardian_mobile_number: "",
+  });
+
+  const [isEditable, setIsEditable] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Fetch parent details when the component mounts
+  useEffect(() => {
+    const fetchParentDetails = async () => {
+      try {
+        const response = await axios.get(
+          `https://run.mocky.io/v3/b0f4943a-0bd1-406a-a596-849e0f07fe48`
+        );
+        setFormData(response.data); // Populate the form with fetched data
+      } catch (error) {
+        console.error("Error fetching parent details:", error);
+      }
+    };
+
+    if (prn) {
+      fetchParentDetails();
+    }
+  }, [prn]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleEdit = () => {
+    setIsEditable(true);
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      await axios.put(
+        `https://mentor-mentee-backend.vercel.app/parents/${prn}`,
+        formData
+      );
+      alert("Parent details updated successfully!");
+      setIsEditable(false);
+    } catch (error) {
+      console.error("Error updating parent details:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setShowPopup(true); // Show confirmation popup before submission
+
+    try {
+      await axios.put(
+        `https://mentor-mentee-backend.vercel.app/parents/${prn}`,
+        formData
+      );
+      alert("Parent details submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting parent details:", error);
+    }
+  };
 
   return (
-    <div className="parent-details">
-      <h1>Parent Details for PRN: {prn}</h1>
-      {/* Display Parent Details Here */}
-      <p>This is the page for parent details. You can add the actual content here.</p>
-    </div>
+    <form onSubmit={handleSubmit} className="form-details-form">
+      <h2>Parent Details</h2>
+
+      <div className="editable-section">
+        <h3>Father's Details</h3>
+        <div className="form-row">
+          <label>
+            Name:
+            <input
+              type="text"
+              name="father_name"
+              value={formData.father_name}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+          <label>
+            Occupation:
+            <input
+              type="text"
+              name="father_occupation"
+              value={formData.father_occupation}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+        </div>
+        <div className="form-row">
+          <label>
+            Mobile Number:
+            <input
+              type="tel"
+              name="father_mobile_number"
+              value={formData.father_mobile_number}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className="editable-section">
+        <h3>Mother's Details</h3>
+        <div className="form-row">
+          <label>
+            Name:
+            <input
+              type="text"
+              name="mother_name"
+              value={formData.mother_name}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+          <label>
+            Occupation:
+            <input
+              type="text"
+              name="mother_occupation"
+              value={formData.mother_occupation}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+        </div>
+        <div className="form-row">
+          <label>
+            Mobile Number:
+            <input
+              type="tel"
+              name="mother_mobile_number"
+              value={formData.mother_mobile_number}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className="editable-section">
+        <h3>Guardian's Details</h3>
+        <div className="form-row">
+          <label>
+            Name:
+            <input
+              type="text"
+              name="guardian_name"
+              value={formData.guardian_name}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+          <label>
+            Occupation:
+            <input
+              type="text"
+              name="guardian_occupation"
+              value={formData.guardian_occupation}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+        </div>
+        <div className="form-row">
+          <label>
+            Mobile Number:
+            <input
+              type="tel"
+              name="guardian_mobile_number"
+              value={formData.guardian_mobile_number}
+              onChange={handleChange}
+              readOnly={!isEditable}
+            />
+          </label>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      {!isEditable ? (
+        <button type="button" onClick={handleEdit}>
+          Edit
+        </button>
+      ) : (
+        <button type="button" onClick={handleSaveChanges}>
+          Save Changes
+        </button>
+      )}
+      <button type="submit">Submit</button>
+
+      {/* Pop-up Confirmation */}
+      {showPopup && (
+        <div className="popup">
+          <p>Submitting Changes for Approval</p>
+          <button type="button" onClick={() => setShowPopup(false)}>
+            Close
+          </button>
+        </div>
+      )}
+    </form>
   );
 };
 

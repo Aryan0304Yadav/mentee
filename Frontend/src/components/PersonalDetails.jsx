@@ -38,6 +38,7 @@ const PersonalDetails = () => {
 
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -95,6 +96,7 @@ const PersonalDetails = () => {
 
   const handleSaveChanges = () => {
     setIsEditable(false);
+    setIsChangesSaved(true); // Mark changes as saved
     alert("Changes saved successfully!");
   };
 
@@ -243,7 +245,8 @@ const PersonalDetails = () => {
         </div>
       )}
 
-      <button type="submit">Submit</button>
+      {/* Submit Button appears only after Save Changes is clicked */}
+      {isChangesSaved && <button type="submit">Submit</button>}
     </form>
   );
 };

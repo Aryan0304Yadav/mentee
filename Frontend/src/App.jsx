@@ -8,9 +8,9 @@ import MiscDetails from './components/MiscDetails';
 import AcademicDetails from './components/AcademicDetails';
 import ResidentialDetails from './components/ResidentialDetails';
 import PreAdmissionAcademicDetails from './components/PreAdmissionAcademicDetails';
-import PostAdmissionAcademicDetails from './components/PostAdmissionAcademicDetails'; // Updated import
-import Observations from './components/MentorObservation'; // Ensure the Observations component exists
-import ParentDetails from './components/ParentDetails'; // Import the new ParentDetails component
+import PostAdmissionAcademicDetails from './components/PostAdmissionAcademicDetails'; // Import the Post Admission component
+import Observations from './components/MentorObservation';
+import ParentDetails from './components/ParentDetails';
 import './App.css';
 
 // Define the PRN constant
@@ -19,7 +19,7 @@ const PRN = "PRN002"; // Example PRN, can be dynamically fetched or passed down
 const App = () => {
   return (
     <Router>
-      <div className='dashboard'>
+      <div className="dashboard">
         <Sidebar prn={PRN} /> {/* Passing the PRN as a prop to Sidebar */}
         <div className="dashboard--content">
           <Routes>

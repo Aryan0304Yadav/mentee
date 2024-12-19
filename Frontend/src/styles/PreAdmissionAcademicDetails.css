@@ -1,87 +1,68 @@
 .form-academic-details {
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-  }
-  
-  .form-academic-details h2 {
-    color: #526d82;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .form-academic-details .form-row {
-    font-weight: bold;
-    color: #4a5568;
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Space between label and input */
-    margin-bottom: 20px; /* Space below each row */
-  }
-  
-  .form-academic-details label {
-    font-weight: bold;
-  }
-  
-  .form-academic-details input[type="number"] {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #dde6ed;
-    background: #dde6ed;
-    color: #526d82;
-    outline: none;
-    width: 100%;
-    transition: border-color 0.2s ease-in-out;
-  }
-  
-  .form-academic-details input[type="number"]:focus {
-    border-color: #526d82;
-  }
-  
-  .form-academic-details button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #526d82;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .form-academic-details button[type="submit"]:hover {
-    background-color: #145090;
-  }
-  
-/* Yes/No button styling */
-.yes-no-buttons {
-  display: inline-flex;  /* Use inline-flex to keep buttons inline */
-  gap: 10px;  /* Space between buttons */
-  justify-content: flex-start;
-  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa; /* Neutral background color */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
-.yes-no-buttons button {
+.form-academic-details h2 {
+  color: #526d82; /* Soft blue for heading */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-academic-details .form-row {
+  font-weight: bold;
+  color: #4a5568; /* Dark gray for text */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between label and input */
+  margin-bottom: 20px; /* Space below each row */
+}
+
+.form-academic-details label {
+  font-weight: bold;
+  color: #333; /* Dark gray for labels */
+}
+
+.form-academic-details input[type="number"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dde6ed; /* Light border color */
+  background: #dde6ed; /* Light blue-grey background */
+  color: #526d82; /* Soft blue for text */
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-academic-details input[type="number"]:focus {
+  border-color: #526d82; /* Soft blue on focus */
+}
+
+.form-academic-details button[type="submit"] {
   padding: 10px 20px;
-  background-color: #f0f0f0;  /* Default background color */
-  color: #000;  /* Text color set to black */
-  border: 1px solid #ccc;
+  background-color: #526d82; /* Soft blue for button */
+  color: #fff; /* White text */
+  border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.yes-no-buttons button.selected {
-  background-color: #526d82;
-  color: #fff;
+.form-academic-details button[type="submit"]:hover {
+  background-color: #145090; /* Darker blue on hover */
 }
 
-.yes-no-buttons button:hover {
-  background-color: #dde6ed;  /* Light background on hover */
+.uneditable-message {
+  color: #e53e3e;  /* Red color to indicate warning */
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
 }

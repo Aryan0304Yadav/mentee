@@ -1,83 +1,189 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
-import '../styles/PostAdmissionAcademicDetails.css'; // CSS for the form styling
+import '../styles/PostAdmissionAcademicDetails.css'; // Ensure the CSS file is imported
 
 const PostAdmissionAcademicDetails = () => {
-  const [sgpas, setSgpas] = useState({
-    semester1: '',
-    semester2: '',
-    semester3: '',
-    semester4: '',
-    semester5: '',
-    semester6: '',
-    semester7: '',
-    semester8: ''
+  const [editable, setEditable] = useState(false); // State to toggle edit mode
+  const [selectedSemester, setSelectedSemester] = useState('semester1'); // Default selected semester
+  const [subjects, setSubjects] = useState({
+    semester1: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+    ],
+    semester2: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+    ],
+    semester3: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+    ],
+    semester4: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+    ],
+    semester5: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+    ],
+    semester6: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+    ],
+    semester7: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+    ],
+    semester8: [
+      { name: 'Subject 1', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 2', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 2 },
+      { name: 'Subject 3', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+      { name: 'Subject 4', ia1: '', ia2: '', semesterEndMarks: '', kts: 'No', attempts: 1 },
+      { name: 'Subject 5', ia1: '', ia2: '', semesterEndMarks: '', kts: 'Yes', attempts: 1 },
+    ],
   });
 
-  // Handle changes in SGPA fields (restrict to 2 decimal places)
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Allow empty value or a valid number with up to two decimal places
-    if (value === '' || /^[0-9]*(\.[0-9]{0,2})?$/.test(value)) {
-      setSgpas({ ...sgpas, [name]: value });
-    }
+  const handleChange = (e, semester, subjectIndex, field) => {
+    const { value } = e.target;
+    setSubjects((prevSubjects) => {
+      const updatedSubjects = { ...prevSubjects };
+      updatedSubjects[semester][subjectIndex][field] = value;
+      return updatedSubjects;
+    });
   };
 
-  // Calculate CGPA (average of entered SGPA values)
+  const handleEditClick = () => {
+    setEditable(!editable); // Toggle the edit mode
+  };
+
+  const handleSemesterSelect = (semester) => {
+    setSelectedSemester(semester); // Update the selected semester
+  };
+
   const calculateCGPA = () => {
-    const enteredSgpas = Object.values(sgpas).filter(value => value !== ''); // Only consider non-empty values
-    if (enteredSgpas.length === 0) return 0;
-    const sum = enteredSgpas.reduce((acc, sgpa) => acc + parseFloat(sgpa), 0);
-    return (sum / enteredSgpas.length).toFixed(2); // Round to two decimal places
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // Assuming we're saving the data to a backend (replace with your API endpoint)
-      await axios.post('https://your-api-endpoint.com/save-sgpas', sgpas);
-      alert('SGPA data saved successfully');
-    } catch (error) {
-      console.error('Error saving SGPA data:', error);
-    }
+    const totalMarks = Object.values(subjects).flat().reduce((acc, subject) => {
+      const totalSubjectMarks = (parseFloat(subject.ia1) || 0) + (parseFloat(subject.ia2) || 0) + (parseFloat(subject.semesterEndMarks) || 0);
+      return acc + totalSubjectMarks;
+    }, 0);
+    const subjectCount = Object.values(subjects).flat().length * 3; // 3 fields per subject (IA1, IA2, End Sem)
+    return (totalMarks / subjectCount).toFixed(2); // Example CGPA calculation
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-details-form">
+    <form className="form-academic-details">
       <h2>Post Admission Academic Details</h2>
 
-      {/* SGPA for each semester */}
-      {Object.keys(sgpas).map((semester, index) => (
-        <div className="form-row" key={semester}>
-          <label>
-            {`Semester ${index + 1} SGPA:`}
-            <input
-              type="number"
-              name={semester}
-              value={sgpas[semester]}
-              onChange={handleChange}
-              min="0"
-              max="10"
-              step="0.01"  // Allow up to two decimal places
-            />
-          </label>
-        </div>
-      ))}
-
-      {/* Display CGPA */}
-      <div className="form-row">
-        <label>CGPA:</label>
-        <input
-          type="text"
-          value={calculateCGPA()}
-          readOnly
-          placeholder="Calculated CGPA"
-        />
+      {/* Semester Selection Buttons */}
+      <div className="semester-buttons">
+        {Object.keys(subjects).map((semester, index) => (
+          <button
+            key={semester}
+            type="button"
+            className={selectedSemester === semester ? 'active' : ''} // Highlight the selected semester button
+            onClick={() => handleSemesterSelect(semester)} // Select the semester
+          >
+            {`Semester ${index + 1}`}
+          </button>
+        ))}
       </div>
 
-      <button type="submit">Submit</button>
+      {/* Editable Section */}
+      <div className="editable-section">
+        <h3>{`Marks for ${selectedSemester}`}</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>IA 1</th>
+              <th>IA 2</th>
+              <th>End Semester</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subjects[selectedSemester].map((subject, subjectIndex) => (
+              <tr key={subject.name}>
+                <td>{subject.name}</td>
+                <td>
+                  <input
+                    type="number"
+                    value={subject.ia1}
+                    readOnly={!editable}
+                    onChange={(e) => handleChange(e, selectedSemester, subjectIndex, 'ia1')}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={subject.ia2}
+                    readOnly={!editable}
+                    onChange={(e) => handleChange(e, selectedSemester, subjectIndex, 'ia2')}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={subject.semesterEndMarks}
+                    readOnly={!editable}
+                    onChange={(e) => handleChange(e, selectedSemester, subjectIndex, 'semesterEndMarks')}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <button type="button" onClick={handleEditClick}>
+          {editable ? 'Save Changes' : 'Edit'}
+        </button>
+      </div>
+
+      {/* Non-Editable Section */}
+      <div className="non-editable-section">
+        <h3>Non-Editable Details</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Semester</th>
+              <th>KTS</th>
+              <th>Attempts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subjects[selectedSemester].map((subject, index) => (
+              <tr key={index}>
+                <td>{subject.name}</td>
+                <td>{subject.kts}</td>
+                <td>{subject.attempts}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="cgpa-container">
+        <p><strong>Calculated CGPA: {calculateCGPA()}</strong></p>
+      </div>
     </form>
   );
 };

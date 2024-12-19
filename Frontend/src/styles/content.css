@@ -99,7 +99,7 @@
 
 .card--container {
   display: flex; /* Keeps the cards in a row */
-  gap: 10px; /* Adds spacing between the cards */
+  gap: 20px; /* Adds spacing between the cards */
   justify-content: space-between; /* Distributes cards evenly across the row */
   align-items: center; /* Aligns the cards vertically in the center */
   margin-top: 2rem;
@@ -110,7 +110,7 @@
   flex: 1; /* Cards will equally share available space */
   max-width: 300px; /* Optional: Sets a max width for each card */
   background: #dde6ed;
-  padding: 15px 10px;
+  padding: 14px 18px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -135,11 +135,11 @@
   transition: color 0.3s ease-in-out;
 }
 
-.card:hover .card--cover .card-icon {
+.card:hover .card--cover .card-icon{
   color: #145090;
 }
 
-/*inner whtie box and the text inside it */
+/*inner WHITE box and the text inside it */
 .card--title { 
   background: #ffffffc0;
   width: 80%; /* Reduced width of inner white box */
@@ -150,5 +150,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1px 0; /* Adjusted padding to reduce height */
+  padding: 1px 5px; /* Adjusted padding to reduce height */
 }

@@ -98,20 +98,25 @@
 }
 
 .card--container {
-  display: flex;
-  gap: 20px;
-  align-items: center;
+  display: flex; /* Keeps the cards in a row */
+  gap: 10px; /* Adds spacing between the cards */
+  justify-content: space-between; /* Distributes cards evenly across the row */
+  align-items: center; /* Aligns the cards vertically in the center */
   margin-top: 2rem;
+  width: 100%; /* Ensures the container spans the full width */
 }
 
 .card {
-  flex: 1; /* Adjusted to 21% to fit five cards with gaps */
+  flex: 1; /* Cards will equally share available space */
+  max-width: 300px; /* Optional: Sets a max width for each card */
   background: #dde6ed;
-  padding: 20px;
+  padding: 15px 10px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Centers the content inside each card */
+  text-align: center;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -126,21 +131,24 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 15px;
-  color: #4a5568; /* Default color of the icons */
-  transition: color 0.3s ease-in-out; /* Smooth color transition */
+  color: #4a5568;
+  transition: color 0.3s ease-in-out;
 }
 
-/* Change the icon color on card hover */
 .card:hover .card--cover .card-icon {
-  color: #145090; /* Change to the desired hover color */
+  color: #145090;
 }
-.card--title{
+
+/*inner whtie box and the text inside it */
+.card--title { 
   background: #ffffffc0;
-  width: 100%;
+  width: 80%; /* Reduced width of inner white box */
   text-align: center;
-  padding: 10px 0;
   font-size: 14px;
   color: #526d82;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1px 0; /* Adjusted padding to reduce height */
 }
-

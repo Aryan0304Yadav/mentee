@@ -5,7 +5,7 @@ const menteeRouter = express.Router();
 
 menteeRouter.get('/attendance-fetch/:id', async (req, res) => {
   try {
-    const studentId = req.params.student_id; // Get the student_id from URL parameters
+    const studentId = req.params.id; // Get the student_id from URL parameters
     // Query the attendance table for the given student_id
     const query = 'SELECT subject, average_attendance FROM attendance WHERE student_id = $1';
     const result = await client.query(query, [studentId]);

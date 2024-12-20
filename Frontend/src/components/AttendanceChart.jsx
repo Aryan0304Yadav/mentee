@@ -1,89 +1,124 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import '../styles/AttendanceChart.css';
 
-const ChartComponent = () => {
+const AttendanceChart = ({ prn }) => {
   const chartRef = useRef(null);
-  const [chartType, setChartType] = useState('bar'); // Default chart type is bar
-  const [attendanceType, setAttendanceType] = useState('theory'); // Default attendance type is theory
-  const [attendanceData, setAttendanceData] = useState([]); // State to store fetched data
   const myChartRef = useRef(null);
+  const [chartType, setChartType] = useState('bar');
+  const [attendanceType, setAttendanceType] = useState('theory');
+  const [attendanceData, setAttendanceData] = useState([]);
 
-  // Fetch the attendance data from the backend (or public folder)
+  // Fetch attendance data when PRN changes
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/attendance.json'); // Access JSON file from the public folder
-        setAttendanceData(response.data.attendance);
+        const response = await axios.get(`http://localhost:3000/mentee/attendance-fetch/${prn}`);
+        const fetchedData = response.data.attendance || [];
+        setAttendanceData(fetchedData);
       } catch (error) {
-        console.error('Error fetching attendance data', error);
+        console.error('Error fetching attendance data:', error);
+        setAttendanceData([]);
       }
     };
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (myChartRef.current) {
-      myChartRef.current.destroy(); // Destroy existing chart instance if it exists
+    if (prn) {
+      fetchData();
     }
+  }, [prn]);
 
-    // Prepare the labels (subjects) and data (attendance values)
-    const subjects = attendanceData.map((item) => item.subject); // Extract subjects
-    const attendanceValues = attendanceData.map((item) => 
-      attendanceType === 'theory' ? item.theory : item.lab
-    ); // Extract attendance values based on type (theory/lab)
-    //temporary comment line
+  // Render or update the chart
+  useLayoutEffect(() => {
+    const initializeChart = () => {
+      if (!chartRef.current) {
+        console.warn('Chart reference is not ready.');
+        return;
+      }
 
-    const ctx = chartRef.current.getContext('2d');
-    myChartRef.current = new Chart(ctx, {
-      type: chartType,
-      data: {
-        labels: subjects, // Use subjects for x-axis labels
-        datasets: [
-          {
-            label: attendanceType === 'theory' ? 'Theory Attendance' : 'Lab Attendance',
-            data: attendanceValues, // Use the filtered attendance data
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-            ],
-            borderWidth: 1,
+      // Destroy the existing chart instance
+      if (myChartRef.current) {
+        myChartRef.current.destroy();
+      }
+
+      // Filter attendance data based on type
+      const filteredData = attendanceData.filter((item) => {
+        if (attendanceType === 'theory') {
+          return !item.subject.toLowerCase().includes('lab');
+        }
+        if (attendanceType === 'lab') {
+          return item.subject.toLowerCase().includes('lab');
+        }
+        return false;
+      });
+
+      // Prepare chart data (handles empty data gracefully)
+      const subjects = filteredData.length > 0 ? filteredData.map((item) => item.subject) : [];
+      const attendanceValues = filteredData.length > 0 ? filteredData.map((item) => item.average_attendance) : [];
+
+      // Generate a set of random colors for each subject
+      const backgroundColors = subjects.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`);
+      const borderColors = backgroundColors.map((color) => color.replace('0.5', '1'));
+
+      const ctx = chartRef.current.getContext('2d');
+      myChartRef.current = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: subjects,
+          datasets: [
+            {
+              label: attendanceType === 'theory' ? 'Theory Attendance' : 'Lab Attendance',
+              data: attendanceValues,
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
+          plugins: {
+            legend: {
+              display: subjects.length > 0, // Hide legend if no data
+            },
           },
         },
-      },
-    });
-  }, [chartType, attendanceType, attendanceData]);
+      });
+    };
+
+    initializeChart();
+
+    // Cleanup chart instance on unmount or re-render
+    return () => {
+      if (myChartRef.current) {
+        myChartRef.current.destroy();
+      }
+    };
+  }, [attendanceType, chartType, attendanceData]);
+
+  // Handle attendance type change
+  const handleAttendanceTypeChange = (e) => {
+    setAttendanceType(e.target.value);
+  };
 
   return (
     <div className="chart">
       <div className="dropdowns">
         <label>
           Attendance Type:
-          <select value={attendanceType} onChange={(e) => setAttendanceType(e.target.value)}>
+          <select value={attendanceType} onChange={handleAttendanceTypeChange}>
             <option value="theory">Theory</option>
             <option value="lab">Lab</option>
           </select>
         </label>
-  
+
         <label>
           Chart Type:
           <select value={chartType} onChange={(e) => setChartType(e.target.value)}>
@@ -95,13 +130,16 @@ const ChartComponent = () => {
           </select>
         </label>
       </div>
+
       <div className="chart-container">
         <canvas ref={chartRef}></canvas>
       </div>
     </div>
   );
-  
-
 };
 
-export default ChartComponent;
+AttendanceChart.propTypes = {
+  prn: PropTypes.string.isRequired,
+};
+
+export default AttendanceChart;

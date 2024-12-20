@@ -11,8 +11,10 @@ const Profile = () => {
   const [userData, setUserData] = useState({
     name: '',
     rollNumber: '',
+    phone:'',
     branch: '',
     batch: '',
+    mentor:'',
     email: ''
   });
 
@@ -56,12 +58,11 @@ const Profile = () => {
           <img src={profileImage} alt="User Profile" />
         </div>
         <div className="user--detail">
-          <h3 className="username">{userData.name}</h3>
-          <h4>PRN: {userData.prn}</h4>
-          <h4>Branch: {userData.branch}</h4>
-          <h4>Batch: {userData.batch}</h4>
+          <h4>Name: {userData.name}</h4>
+          <h4>Phone: {userData.phone}</h4>
           <h4>Email: {userData.email}</h4>
         </div>
+
       </div>
     </div>
   );

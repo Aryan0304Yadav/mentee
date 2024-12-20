@@ -8,6 +8,7 @@ const ChartComponent = () => {
   const [chartType, setChartType] = useState('bar'); // Default chart type is bar
   const [attendanceType, setAttendanceType] = useState('theory'); // Default attendance type is theory
   const [attendanceData, setAttendanceData] = useState([]); // State to store fetched data
+  const [mentorName, setMentorName] = useState('John Doe'); // State for mentor name (for demo purposes)
   const myChartRef = useRef(null);
 
   // Fetch the attendance data from the backend (or public folder)
@@ -31,10 +32,9 @@ const ChartComponent = () => {
 
     // Prepare the labels (subjects) and data (attendance values)
     const subjects = attendanceData.map((item) => item.subject); // Extract subjects
-    const attendanceValues = attendanceData.map((item) => 
+    const attendanceValues = attendanceData.map((item) =>
       attendanceType === 'theory' ? item.theory : item.lab
     ); // Extract attendance values based on type (theory/lab)
-    //temporary comment line
 
     const ctx = chartRef.current.getContext('2d');
     myChartRef.current = new Chart(ctx, {
@@ -83,7 +83,7 @@ const ChartComponent = () => {
             <option value="lab">Lab</option>
           </select>
         </label>
-  
+
         <label>
           Chart Type:
           <select value={chartType} onChange={(e) => setChartType(e.target.value)}>
@@ -94,14 +94,20 @@ const ChartComponent = () => {
             <option value="radar">Radar</option>
           </select>
         </label>
+
+        <div className="mentor-assigned">
+          <label>Mentor Assigned:</label>
+          <select className="mentor-dropdown" disabled>
+            <option>{mentorName}</option>
+          </select>
+        </div>
       </div>
+
       <div className="chart-container">
         <canvas ref={chartRef}></canvas>
       </div>
     </div>
   );
-  
-
 };
 
 export default ChartComponent;

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from 'axios';
 import ProfileHeader from './ProfileHeader';
 import '../styles/profile.css';
-import profileImage from '../assets/images/wlr.jpg';
+// import profileImage from '../assets/images/wlr.jpg';
 
 const Profile = () => {
   const { prn } = useParams();
@@ -14,7 +14,8 @@ const Profile = () => {
     batch: '',
     email: '',
     mentor: '',
-    phone: ''
+    phone: '',
+    profilePicture: ''
   });
 
   useEffect(() => {
@@ -28,7 +29,8 @@ const Profile = () => {
           batch: response.data.batch,
           email: response.data.old_student_email,
           phone: response.data.old_student_phone,
-          mentor: response.data.assigned_mentor_name
+          mentor: response.data.assigned_mentor_name,
+          profilePicture: response.data.profile_photo
         });
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -43,7 +45,7 @@ const Profile = () => {
       <ProfileHeader />
       <div className="user--profile">
         <div className="user--image">
-          <img src={profileImage} alt="User Profile" />
+          <img src={`http://localhost:3000${userData.profilePicture}`} alt="User Profile" />
         </div>
         <div className="user--detail">
           <div className="profile-item">

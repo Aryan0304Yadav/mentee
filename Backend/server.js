@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDatabase, db } = require('./database/db');
+const menteeRouter = require('./routes/mentee');
 const app = express();
 
 require('dotenv').config();
@@ -8,6 +8,6 @@ require('dotenv').config();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.listen(process.env.PORT, async () => {
-  connectDatabase();
-});
+app.use('/mentee', menteeRouter);
+
+app.listen(process.env.PORT);

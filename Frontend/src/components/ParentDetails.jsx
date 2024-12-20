@@ -19,6 +19,7 @@ const ParentDetails = () => {
 
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   // Fetch parent details when the component mounts
   useEffect(() => {
@@ -53,27 +54,39 @@ const ParentDetails = () => {
         `https://mentor-mentee-backend.vercel.app/parents/${prn}`,
         formData
       );
-      alert("Parent details updated successfully!");
       setIsEditable(false);
     } catch (error) {
       console.error("Error updating parent details:", error);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setShowPopup(true); // Show confirmation popup before submission
+  };
+
+  const handleClosePopup = async () => {
+    setShowPopup(false); // Close the first popup
 
     try {
       await axios.put(
         `https://mentor-mentee-backend.vercel.app/parents/${prn}`,
         formData
       );
-      alert("Parent details submitted successfully!");
+
+      // After the API request completes, show the success alert
+      setShowSuccessAlert(true);
     } catch (error) {
       console.error("Error submitting parent details:", error);
     }
   };
+
+  useEffect(() => {
+    if (showSuccessAlert) {
+      alert("Parent details submitted successfully!"); // Display the success alert once after the form is submitted
+      setShowSuccessAlert(false); // Reset the success alert state
+    }
+  }, [showSuccessAlert]);
 
   return (
     <form onSubmit={handleSubmit} className="form-details-form">
@@ -193,23 +206,25 @@ const ParentDetails = () => {
         </div>
       </div>
 
-      {/* Buttons */}
-      {!isEditable ? (
-        <button type="button" onClick={handleEdit}>
-          Edit
-        </button>
-      ) : (
-        <button type="button" onClick={handleSaveChanges}>
-          Save Changes
-        </button>
-      )}
-      <button type="submit">Submit</button>
+      {/* Buttons Container */}
+      <div className="button-container">
+        {!isEditable ? (
+          <button type="button" onClick={handleEdit}>
+            Edit
+          </button>
+        ) : (
+          <button type="button" onClick={handleSaveChanges}>
+            Save Changes
+          </button>
+        )}
+        <button type="submit">Submit</button>
+      </div>
 
       {/* Pop-up Confirmation */}
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>
-          <button type="button" onClick={() => setShowPopup(false)}>
+          <button type="button" onClick={handleClosePopup}>
             Close
           </button>
         </div>

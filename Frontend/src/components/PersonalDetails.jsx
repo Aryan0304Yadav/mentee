@@ -38,7 +38,7 @@ const PersonalDetails = () => {
 
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
+  const [isChangesSaved, setIsChangesSaved] = useState(false);
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -72,7 +72,11 @@ const PersonalDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowPopup(true); // Show popup before submitting
+    setShowPopup(true); // Show confirmation popup
+  };
+
+  const handlePopupClose = async () => {
+    setShowPopup(false); // Hide confirmation popup
 
     try {
       const updatedData = {
@@ -84,7 +88,10 @@ const PersonalDetails = () => {
         `https://mentor-mentee-backend.vercel.app/students/${prn}`,
         updatedData
       );
-      alert("Student details updated successfully");
+
+      setTimeout(() => {
+        alert("Student details updated successfully"); // Show alert after the popup is closed
+      }, 0);
     } catch (error) {
       console.error("Error updating student details:", error);
     }
@@ -166,15 +173,22 @@ const PersonalDetails = () => {
           </label>
         </div>
 
-        {!isEditable ? (
-          <button type="button" onClick={handleEdit}>
-            Edit
-          </button>
-        ) : (
+        {/* Edit Button */}
+        <button type="button" onClick={handleEdit} disabled={isEditable}>
+          Edit
+        </button>
+
+        {/* Save Changes Button */}
+        {isEditable && (
           <button type="button" onClick={handleSaveChanges}>
             Save Changes
           </button>
         )}
+
+        {/* Submit Button */}
+        <button type="submit" disabled={!isChangesSaved}>
+          Submit
+        </button>
       </div>
 
       {/* Non-editable Fields Section */}
@@ -239,14 +253,11 @@ const PersonalDetails = () => {
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>
-          <button type="button" onClick={() => setShowPopup(false)}>
+          <button type="button" onClick={handlePopupClose}>
             Close
           </button>
         </div>
       )}
-
-      {/* Submit Button appears only after Save Changes is clicked */}
-      {isChangesSaved && <button type="submit">Submit</button>}
     </form>
   );
 };

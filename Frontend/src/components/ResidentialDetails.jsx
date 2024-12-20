@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import "../styles/ResidentialDetails.css"; 
+import "../styles/ResidentialDetails.css";
 
 const ResidentialDetails = () => {
   const { prn } = useParams();
@@ -21,17 +21,18 @@ const ResidentialDetails = () => {
   const [showPopup, setShowPopup] = useState(false); // State to show confirmation popup
   const [isSameAddress, setIsSameAddress] = useState(false); // State for Yes/No button for copying address
   const [formErrors, setFormErrors] = useState({}); // To track form validation errors
+  const [touched, setTouched] = useState({}); // Track if the user has interacted with a field
   const [isFormValid, setIsFormValid] = useState(true); // Track if the form is valid for submission
 
   // List of all states in India
   const states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
-    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", 
-    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", 
-    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", 
-    "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
-    "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep", 
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya",
+    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim",
+    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand",
+    "West Bengal", "Andaman and Nicobar Islands", "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep",
     "Delhi", "Puducherry"
   ];
 
@@ -56,36 +57,60 @@ const ResidentialDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevState) => {
+      const updatedData = { ...prevState, [name]: value };
+
+      // If "Yes" is selected for "same as permanent address", automatically copy current address to permanent address
+      if (isSameAddress) {
+        if (name.includes("current_address")) {
+          updatedData.permanent_address_line_1 = updatedData.current_address_line_1;
+          updatedData.permanent_address_line_2 = updatedData.current_address_line_2;
+          updatedData.permanent_address_pincode = updatedData.current_address_pincode;
+        }
+      }
+
+      return updatedData;
+    });
 
     // Clear error when user changes the input
     if (name.includes("pincode")) {
       setFormErrors({ ...formErrors, [name]: "" });
+      setTouched({ ...touched, [name]: true });
       validateForm();
     }
   };
 
   const handleYesNoChange = (answer) => {
     setIsSameAddress(answer === "yes");
+
     if (answer === "yes") {
-      setFormData({
-        ...formData,
-        permanent_address_line_1: formData.current_address_line_1,
-        permanent_address_line_2: formData.current_address_line_2,
-        permanent_address_pincode: formData.current_address_pincode,
-      });
+      // Automatically copy current address to permanent address when 'Yes' is selected
+      setFormData((prevState) => ({
+        ...prevState,
+        permanent_address_line_1: prevState.current_address_line_1,
+        permanent_address_line_2: prevState.current_address_line_2,
+        permanent_address_pincode: prevState.current_address_pincode,
+      }));
+    } else {
+      // Optionally reset permanent address fields if "No" is selected
+      setFormData((prevState) => ({
+        ...prevState,
+        permanent_address_line_1: "",
+        permanent_address_line_2: "",
+        permanent_address_pincode: "",
+      }));
     }
   };
 
   const validateForm = () => {
     const errors = {};
 
-    // Check if PINCODE is valid
-    if (!/^\d{6}$/.test(formData.current_address_pincode)) {
+    // Check if PINCODE is valid only if the field is touched
+    if (touched.current_address_pincode && !/^\d{6}$/.test(formData.current_address_pincode)) {
       errors.current_address_pincode = "Current Pincode must be a 6-digit number.";
     }
 
-    if (!/^\d{6}$/.test(formData.permanent_address_pincode)) {
+    if (touched.permanent_address_pincode && !/^\d{6}$/.test(formData.permanent_address_pincode)) {
       errors.permanent_address_pincode = "Permanent Pincode must be a 6-digit number.";
     }
 
@@ -106,20 +131,24 @@ const ResidentialDetails = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     // If form is invalid, don't submit
     if (!isFormValid) return;
 
-    setShowPopup(true); // Show popup before submitting
+    setShowPopup(true); // Show the dialog box
+  };
+
+  const handleClosePopup = async () => {
+    setShowPopup(false); // Close the dialog box
 
     try {
       await axios.put(
         `https://mentor-mentee-backend.vercel.app/residential-details/${prn}`,
         formData
       );
-      alert("Residential details updated successfully");
+      alert("Residential details updated successfully"); // Trigger the alert
     } catch (error) {
       console.error("Error updating residential details:", error);
     }
@@ -133,6 +162,10 @@ const ResidentialDetails = () => {
     setIsEditable(false); // Disable editing
     alert("Changes saved successfully!");
   };
+
+  useEffect(() => {
+    validateForm(); // Validate form when formData changes
+  }, [formData]);
 
   return (
     <form onSubmit={handleSubmit} className="form-details-form">
@@ -159,7 +192,6 @@ const ResidentialDetails = () => {
             </select>
           </label>
 
-          {/* Current Address - 3 separate input fields */}
           <label>
             Current Address Line 1:
             <input
@@ -193,15 +225,16 @@ const ResidentialDetails = () => {
               onChange={handleChange}
               readOnly={!isEditable}
               required
-              pattern="\d{6}" // Ensure it's exactly 6 digits
+              pattern="\d{6}"
               title="Pincode must be 6 digits"
             />
-            {formErrors.current_address_pincode && (
-              <span className="error">{formErrors.current_address_pincode}</span>
+            {touched.current_address_pincode && formErrors.current_address_pincode && (
+              <span style={{ color: 'red', fontSize: '12px' }}>
+                {formErrors.current_address_pincode}
+              </span>
             )}
           </label>
 
-          {/* Yes/No Button for Permanent Address */}
           <div className="yes-no-buttons">
             <label>Is the permanent address same as current?</label>
             <button
@@ -220,7 +253,6 @@ const ResidentialDetails = () => {
             </button>
           </div>
 
-          {/* Permanent Address - 3 separate input fields */}
           <label>
             Permanent Address Line 1:
             <input
@@ -228,7 +260,7 @@ const ResidentialDetails = () => {
               name="permanent_address_line_1"
               value={formData.permanent_address_line_1}
               onChange={handleChange}
-              readOnly={!isEditable}
+              readOnly={isSameAddress || !isEditable} // Make it readonly if "Yes" is selected or not in edit mode
               required
             />
           </label>
@@ -240,7 +272,7 @@ const ResidentialDetails = () => {
               name="permanent_address_line_2"
               value={formData.permanent_address_line_2}
               onChange={handleChange}
-              readOnly={!isEditable}
+              readOnly={isSameAddress || !isEditable} // Same as above
               required
             />
           </label>
@@ -252,13 +284,15 @@ const ResidentialDetails = () => {
               name="permanent_address_pincode"
               value={formData.permanent_address_pincode}
               onChange={handleChange}
-              readOnly={!isEditable}
+              readOnly={isSameAddress || !isEditable} // Same as above
               required
-              pattern="\d{6}" // Ensure it's exactly 6 digits
+              pattern="\d{6}"
               title="Pincode must be 6 digits"
             />
-            {formErrors.permanent_address_pincode && (
-              <span className="error">{formErrors.permanent_address_pincode}</span>
+            {touched.permanent_address_pincode && formErrors.permanent_address_pincode && (
+              <span style={{ color: 'red', fontSize: '12px' }}>
+                {formErrors.permanent_address_pincode}
+              </span>
             )}
           </label>
 
@@ -303,17 +337,18 @@ const ResidentialDetails = () => {
         )}
       </div>
 
-      {/* Pop-up Confirmation */}
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>
-          <button type="button" onClick={() => setShowPopup(false)}>
+          <button type="button" onClick={handleClosePopup}>
             Close
           </button>
         </div>
       )}
 
-      <button type="submit" disabled={!isFormValid}>Submit</button>
+      <button type="submit" disabled={!isFormValid}>
+        Submit
+      </button>
     </form>
   );
 };

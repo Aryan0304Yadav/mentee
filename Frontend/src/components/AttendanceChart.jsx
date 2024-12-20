@@ -42,7 +42,7 @@ const AttendanceChart = ({ prn }) => {
         myChartRef.current.destroy();
       }
 
-      // Filter attendance data based on type
+      // Filter attendance data based on type (Theory or Lab)
       const filteredData = attendanceData.filter((item) => {
         if (attendanceType === 'theory') {
           return !item.subject.toLowerCase().includes('lab');
@@ -53,28 +53,29 @@ const AttendanceChart = ({ prn }) => {
         return false;
       });
 
-      // Prepare chart data (handles empty data gracefully)
+      // Prepare chart data
       const subjects = filteredData.length > 0 ? filteredData.map((item) => item.subject) : [];
       const attendanceValues = filteredData.length > 0 ? filteredData.map((item) => item.average_attendance) : [];
 
-      // Generate a set of random colors for each subject
+      // Generate a random color for each subject dynamically
       const backgroundColors = subjects.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`);
       const borderColors = backgroundColors.map((color) => color.replace('0.5', '1'));
+
+      // Prepare the datasets for each subject with individual color mapping
+      const datasets = subjects.map((subject, index) => ({
+        label: subject, // Each subject is its own label
+        data: [attendanceValues[index]], // Attendance value for the current subject
+        backgroundColor: backgroundColors[index], // Unique color for each subject
+        borderColor: borderColors[index],
+        borderWidth: 1,
+      }));
 
       const ctx = chartRef.current.getContext('2d');
       myChartRef.current = new Chart(ctx, {
         type: chartType,
         data: {
-          labels: subjects,
-          datasets: [
-            {
-              label: attendanceType === 'theory' ? 'Theory Attendance' : 'Lab Attendance',
-              data: attendanceValues,
-              backgroundColor: backgroundColors,
-              borderColor: borderColors,
-              borderWidth: 1,
-            },
-          ],
+          labels: [''], // A single empty label, as subjects are now the individual dataset labels
+          datasets: datasets, // Array of datasets for each subject
         },
         options: {
           responsive: true,
@@ -86,7 +87,7 @@ const AttendanceChart = ({ prn }) => {
           },
           plugins: {
             legend: {
-              display: subjects.length > 0, // Hide legend if no data
+              position: 'top', // Position the legend at the top
             },
           },
         },

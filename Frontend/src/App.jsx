@@ -14,7 +14,7 @@ import ParentDetails from './components/ParentDetails';
 import './App.css';
 
 // Define the PRN constant
-const PRN = "PRN002"; // Example PRN, can be dynamically fetched or passed down
+const PRN = "24c61be7-c54f-4ff7-a3f5-cfe9bdc3095b"; // Example PRN, can be dynamically fetched or passed down
 
 const App = () => {
   return (

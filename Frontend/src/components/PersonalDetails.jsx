@@ -7,33 +7,16 @@ import "../styles/PersonalDetails.css";
 const PersonalDetails = () => {
   const { prn } = useParams();
   const [formData, setFormData] = useState({
-    photo: null,
-    branch: "",
-    ac_id: "",
     fullname: "",
     date_of_birth: "",
+    branch: "",
     year_of_admission: "",
     mother_tongue: "",
     blood_group: "",
     health_problems: "",
-    current_address: "",
-    father_name: "",
-    father_occupation: "",
-    father_mobile_number: "",
+    student_mobile_number: "",
     landline: "",
-    mother_name: "",
-    mother_occupation: "",
-    mother_mobile_number: "",
-    email: "",
-    residenceOption: "",
-    relativeName: "",
-    relativeContact: "",
-    guardianName: "",
-    guardianContact: "",
-    friendName: "",
-    friendContact: "",
-    hostelName: "",
-    hostelContact: "",
+    email: ""
   });
 
   const [isEditable, setIsEditable] = useState(false);
@@ -44,17 +27,28 @@ const PersonalDetails = () => {
     const fetchStudentData = async () => {
       try {
         const response = await axios.get(
-          `https://mentor-mentee-backend.vercel.app/students/${prn}`
+          `http://localhost:3000/mentee/personal-details-fetch/${prn}`
         );
-        const studentData = response.data;
+        // const studentData = response.data;
 
-        if (studentData.date_of_birth) {
-          studentData.date_of_birth = DateTime.fromISO(
-            studentData.date_of_birth
+        if (response.data.dob) {
+          response.data.dob = DateTime.fromISO(
+            response.data.dob
           ).toISODate();
         }
 
-        setFormData(studentData);
+        setFormData({
+          fullname: response.data.old_name,
+          date_of_birth: response.data.dob,
+          branch: response.data.branch,
+          year_of_admission: response.data.year_of_admission,
+          mother_tongue: response.data.mother_tongue,
+          blood_group: response.data.blood_group,
+          health_problems: response.data.old_health_problems,
+          student_mobile_number: response.data.old_student_phone,
+          landline: response.data.old_res_landline,
+          email: response.data.old_student_email
+        });
       } catch (error) {
         console.error("Error fetching student data or branch:", error);
       }
@@ -81,7 +75,7 @@ const PersonalDetails = () => {
       };
 
       await axios.put(
-        `https://mentor-mentee-backend.vercel.app/students/${prn}`,
+        `http://localhost:3000/mentee/personal-details-put/${prn}`,
         updatedData
       );
       alert("Student details updated successfully");
@@ -125,7 +119,7 @@ const PersonalDetails = () => {
             <input
               type="tel"
               name="father_mobile_number"
-              value={formData.father_mobile_number}
+              value={formData.student_mobile_number}
               onChange={handleChange}
               readOnly={!isEditable}
               required
@@ -175,6 +169,7 @@ const PersonalDetails = () => {
             Save Changes
           </button>
         )}
+        {isChangesSaved && <button type="submit">Submit</button>}
       </div>
 
       {/* Non-editable Fields Section */}
@@ -246,7 +241,6 @@ const PersonalDetails = () => {
       )}
 
       {/* Submit Button appears only after Save Changes is clicked */}
-      {isChangesSaved && <button type="submit">Submit</button>}
     </form>
   );
 };

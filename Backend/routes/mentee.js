@@ -32,7 +32,7 @@ menteeRouter.get('/dashboard-fetch/:id', async (req, res) => {
       // Send back the result data in the response
       res.json(result.rows[0]);
     } else {
-      res.status(404).json({ message: 'No attendance data found for this student.' });
+      res.status(404).json({ message: 'No data found for this student.' });
     }
   } catch {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -40,7 +40,21 @@ menteeRouter.get('/dashboard-fetch/:id', async (req, res) => {
 });
 
 menteeRouter.get('/personal-details-fetch/:id', async (req, res) => {
-  res.send('hey');
+  try {
+    const studentId = req.params.id; // Get the student_id from URL parameters
+    // Query the attendance table for the given student_id
+    const query = 'SELECT old_name, old_student_phone, old_student_email, branch, blood_group, old_res_landline, dob, mother_tongue, year_of_admission, old_health_problems FROM admission INNER JOIN unknown ON admission.student_id = unknown.student_id WHERE admission.student_id = $1';
+    const result = await client.query(query, [studentId]);
+
+    if (result.rows.length > 0) {
+      // Send back the result data in the response
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'No data found for this student.' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 menteeRouter.get('/misc-details-fetch/:id', async (req, res) => {
@@ -51,6 +65,8 @@ menteeRouter.get('/residential-details-fetch/:id', async (req, res) => {
   res.send('hey');
 });
 
+//Atharva
+
 menteeRouter.get('/pre-admission-academic-details-fetch/:id', async (req, res) => {
   res.send('hey');
 });
@@ -58,6 +74,8 @@ menteeRouter.get('/pre-admission-academic-details-fetch/:id', async (req, res) =
 menteeRouter.get('/post-admission-academic-details-fetch/:id', async (req, res) => {
   res.send('hey');
 });
+
+//Atharva
 
 menteeRouter.get('/observations-fetch/:id', async (req, res) => {
   res.send('hey');

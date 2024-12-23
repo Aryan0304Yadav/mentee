@@ -71,4 +71,22 @@ const personal_details_put = async (req, res) => {
   }
 };
 
-module.exports = { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put };
+const residential_details_fetch = async (req, res) => {
+  try {
+    const studentId = req.params.id; // Get the student_id from URL parameters
+    // Query the attendance table for the given student_id
+    const query = 'SELECT old_currently_living_with, old_current_address, old_permanent_address, old_state, old_area FROM admission WHERE student_id = $1';
+    const result = await client.query(query, [studentId]);
+
+    if (result.rows.length > 0) {
+      // Send back the result data in the response
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'No data found for this student.' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+module.exports = { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch };

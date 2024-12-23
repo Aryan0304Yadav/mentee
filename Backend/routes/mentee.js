@@ -1,61 +1,15 @@
 const express = require('express');
-const { client } = require('../database/db');
+const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put } = require('../controllers/mentee_controllers');
 
 const menteeRouter = express.Router();
 
-menteeRouter.get('/attendance-fetch/:id', async (req, res) => {
-  try {
-    const studentId = req.params.id; // Get the student_id from URL parameters
-    // Query the attendance table for the given student_id
-    const query = 'SELECT subject, average_attendance FROM attendance WHERE student_id = $1';
-    const result = await client.query(query, [studentId]);
+menteeRouter.get('/attendance-fetch/:id', attendance_fetch);
 
-    if (result.rows.length > 0) {
-      // Send back the result data in the response
-      res.json({ attendance: result.rows });
-    } else {
-      res.status(404).json({ message: 'No attendance data found for this student.' });
-    }
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+menteeRouter.get('/dashboard-fetch/:id', dashboard_fetch);
 
-menteeRouter.get('/dashboard-fetch/:id', async (req, res) => {
-  try {
-    const studentId = req.params.id; // Get the student_id from URL parameters
-    // Query the attendance table for the given student_id
-    const query = 'SELECT old_name, profile_photo, old_student_phone, old_student_email, batch, prn, branch, assigned_mentor_name FROM admission INNER JOIN unknown ON admission.student_id = unknown.student_id WHERE admission.student_id = $1';
-    const result = await client.query(query, [studentId]);
+menteeRouter.get('/personal-details-fetch/:id', personal_details_fetch);
 
-    if (result.rows.length > 0) {
-      // Send back the result data in the response
-      res.json(result.rows[0]);
-    } else {
-      res.status(404).json({ message: 'No data found for this student.' });
-    }
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-menteeRouter.get('/personal-details-fetch/:id', async (req, res) => {
-  try {
-    const studentId = req.params.id; // Get the student_id from URL parameters
-    // Query the attendance table for the given student_id
-    const query = 'SELECT old_name, old_student_phone, old_student_email, branch, blood_group, old_res_landline, dob, mother_tongue, year_of_admission, old_health_problems FROM admission INNER JOIN unknown ON admission.student_id = unknown.student_id WHERE admission.student_id = $1';
-    const result = await client.query(query, [studentId]);
-
-    if (result.rows.length > 0) {
-      // Send back the result data in the response
-      res.json(result.rows[0]);
-    } else {
-      res.status(404).json({ message: 'No data found for this student.' });
-    }
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+menteeRouter.put('/personal-details-put/:id', personal_details_put);
 
 menteeRouter.get('/misc-details-fetch/:id', async (req, res) => {
   res.send('hey');

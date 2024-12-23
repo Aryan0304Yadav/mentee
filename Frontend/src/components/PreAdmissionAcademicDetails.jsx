@@ -1,105 +1,120 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
-import "../styles/PreAdmissionAcademicDetails.css"; // Ensure the CSS file is imported
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import "../styles/PreAdmissionAcademicDetails.css";
 
 const PreAdmissionAcademicDetails = () => {
-  const [jeePercentile, setJeePercentile] = useState('');  // State for JEE Percentile
-  const [showSubmitPopup, setShowSubmitPopup] = useState(false); // State to control submit pop-up visibility
-  const [showNextButton, setShowNextButton] = useState(false); // State to control next button visibility
-  const navigate = useNavigate(); // Use useNavigate for routing
+  const [academicDetails, setAcademicDetails] = useState({});
+  const navigate = useNavigate();
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission
-    setShowSubmitPopup(true); // Show the submit pop-up after form submission
-  };
+  // Fetch data from API using axios
+  useEffect(() => {
+    const fetchAcademicDetails = async () => {
+      try {
+        const response = await axios.get('https://run.mocky.io/v3/95e3bd8e-d45c-4592-95d0-aa9f4baf3bb2');
+        setAcademicDetails(response.data);
+      } catch (error) {
+        console.error("Error fetching academic details:", error);
+      }
+    };
+    fetchAcademicDetails();
+  }, []);
 
-  // Function to handle closing the pop-up
-  const handlePopupClose = () => {
-    setShowSubmitPopup(false); // Close the submit pop-up
-    setShowNextButton(true); // Show the "Go to Post Admission" button after closing the pop-up
-  };
-
-  // Function to navigate to the next page
+  // Navigate to the next page
   const handleNextPage = () => {
-    navigate("/post-admission-academic-details"); // Navigate to PostAdmissionAcademicDetails
+    navigate("/post-admission-academic-details");
   };
 
   return (
-    <form className="form-academic-details" onSubmit={handleSubmit}>
+    <div className="form-academic-details">
       <h2>Pre Admission Academic Details</h2>
 
-      {/* Combined Section for Editable and Non-Editable Fields */}
       <div className="form-section">
-        {/* Non-editable Information Section */}
-        <h3>Uneditable Information</h3>
-
+        {/* 10th Percentage and Board */}
         <div className="form-row">
           <label>10th Percentage:</label>
           <input
             type="number"
-            name="tenthPercentage"
-            placeholder="Enter 10th percentage"
-            readOnly={true}  // Fields are now read-only
+            value={academicDetails.tenthPercentage || ''}
+            readOnly
           />
         </div>
+        <div className="form-row">
+          <label>10th Board:</label>
+          <input
+            type="text"
+            value={academicDetails.tenthBoard || ''}
+            readOnly
+          />
+        </div>
+
+        {/* 12th Percentage and Board */}
         <div className="form-row">
           <label>12th Percentage:</label>
           <input
             type="number"
-            name="twelfthPercentage"
-            placeholder="Enter 12th percentage"
-            readOnly={true}  // Fields are now read-only
+            value={academicDetails.twelfthPercentage || ''}
+            readOnly
           />
         </div>
         <div className="form-row">
-          <label>CET Percentile:</label>
+          <label>12th Board:</label>
           <input
-            type="number"
-            name="cetPercentile"
-            placeholder="Enter CET percentile"
-            readOnly={true}  // Fields are now read-only
+            type="text"
+            value={academicDetails.twelfthBoard || ''}
+            readOnly
           />
         </div>
 
+        {/* Diploma Details */}
+        <div className="form-row">
+          <label>Diploma Percentage:</label>
+          <input
+            type="number"
+            value={academicDetails.diplomaPercentage || ''}
+            readOnly
+          />
+        </div>
+        <div className="form-row">
+          <label>Diploma Practiced Stream:</label>
+          <input
+            type="text"
+            value={academicDetails.diplomaStream || ''}
+            readOnly
+          />
+        </div>
+
+        {/* JEE Percentile */}
         <div className="form-row">
           <label>JEE Percentile:</label>
           <input
             type="number"
-            name="jeePercentile"
-            placeholder="Enter JEE percentile"
-            value={jeePercentile}  // Default value for JEE Percentile
-            readOnly={false}  // Allow changes here
-            onChange={(e) => setJeePercentile(e.target.value)}  // Allow change only if editable
+            value={academicDetails.jeePercentile || ''}
+            readOnly
           />
         </div>
 
-        {/* Permanent Message about the form section being uneditable */}
+        {/* CET Percentile */}
+        <div className="form-row">
+          <label>CET Percentile:</label>
+          <input
+            type="number"
+            value={academicDetails.cetPercentile || ''}
+            readOnly
+          />
+        </div>
+
+        {/* Permanent Message */}
         <div className="uneditable-message">
-          This section is uneditable.
+          This section is uneditable and only displays fetched data.
         </div>
       </div>
 
-      {/* Submit Button */}
-      <button type="submit">Submit</button>
-
-      {/* Pop-up for Submit */}
-      {showSubmitPopup && (
-        <div className="popup">
-          <p>Submitted, waiting for approval.</p>
-          <button type="button" onClick={handlePopupClose}>
-            Close
-          </button>
-        </div>
-      )}
-
-      {/* Show "Next" button after pop-up is closed */}
-      {showNextButton && (
-        <button type="button" onClick={handleNextPage}>
-          Go to Post Admission Details
-        </button>
-      )}
-    </form>
+      {/* Navigate to Post Admission Details */}
+      <button type="button" onClick={handleNextPage}>
+        Go to Post Admission Details
+      </button>
+    </div>
   );
 };
 

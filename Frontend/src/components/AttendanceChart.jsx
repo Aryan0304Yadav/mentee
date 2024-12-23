@@ -8,17 +8,19 @@ const ChartComponent = () => {
   const [chartType, setChartType] = useState('bar'); // Default chart type is bar
   const [attendanceType, setAttendanceType] = useState('theory'); // Default attendance type is theory
   const [attendanceData, setAttendanceData] = useState([]); // State to store fetched data
-  const [mentorName, setMentorName] = useState('John Doe'); // State for mentor name (for demo purposes)
+  const [mentorName, setMentorName] = useState(''); // State for mentor name
   const myChartRef = useRef(null);
 
-  // Fetch the attendance data from the backend (or public folder)
+  // Fetch the mentee data and attendance data from Mocky API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/attendance.json'); // Access JSON file from the public folder
-        setAttendanceData(response.data.attendance);
+        const response = await axios.get('https://run.mocky.io/v3/bffa4657-f760-48ce-a593-7c8b48f5d3b0'); // Replace with your Mocky API URL
+        const { mentorName, attendance } = response.data;
+        setMentorName(mentorName); // Set mentor name dynamically
+        setAttendanceData(attendance); // Set attendance data dynamically
       } catch (error) {
-        console.error('Error fetching attendance data', error);
+        console.error('Error fetching data', error);
       }
     };
 
@@ -98,7 +100,7 @@ const ChartComponent = () => {
         <div className="mentor-assigned">
           <label>Mentor Assigned:</label>
           <select className="mentor-dropdown" disabled>
-            <option>{mentorName}</option>
+            <option>{mentorName || 'Loading...'}</option>
           </select>
         </div>
       </div>

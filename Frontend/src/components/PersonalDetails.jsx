@@ -16,11 +16,12 @@ const PersonalDetails = () => {
     health_problems: "",
     student_mobile_number: "",
     landline: "",
-    email: ""
+    email: "",
   });
 
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
 
   useEffect(() => {
@@ -29,12 +30,9 @@ const PersonalDetails = () => {
         const response = await axios.get(
           `http://localhost:3000/mentee/personal-details-fetch/${prn}`
         );
-        // const studentData = response.data;
 
         if (response.data.dob) {
-          response.data.dob = DateTime.fromISO(
-            response.data.dob
-          ).toISODate();
+          response.data.dob = DateTime.fromISO(response.data.dob).toISODate();
         }
 
         setFormData({
@@ -47,7 +45,7 @@ const PersonalDetails = () => {
           health_problems: response.data.old_health_problems,
           student_mobile_number: response.data.old_student_phone,
           landline: response.data.old_res_landline,
-          email: response.data.old_student_email
+          email: response.data.old_student_email,
         });
       } catch (error) {
         console.error("Error fetching student data or branch:", error);
@@ -66,23 +64,41 @@ const PersonalDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowPopup(true); // Show popup before submitting
-
-    try {
-      const updatedData = {
-        ...formData,
-        date_of_birth: DateTime.fromISO(formData.date_of_birth).toISO(),
-      };
-
-      await axios.put(
-        `http://localhost:3000/mentee/personal-details-put/${prn}`,
-        updatedData
-      );
-      alert("Student details updated successfully");
-    } catch (error) {
-      console.error("Error updating student details:", error);
-    }
+    setShowPopup(true);
   };
+
+  const handlePopupClose = async () => {
+    setShowPopup(false);
+    setIsSubmitting(true); // Trigger submission after popup is closed
+  };
+
+  useEffect(() => {
+    const submitData = async () => {
+      if (isSubmitting) {
+        try {
+          const updatedData = {
+            new_name: formData.fullname,
+            new_student_phone: formData.student_mobile_number,
+            new_student_email: formData.email,
+            new_res_landline: formData.landline,
+            new_health_problems: formData.health_problems,
+          };
+
+          await axios.put(
+            `http://localhost:3000/mentee/personal-details-put/${prn}`,
+            updatedData
+          );
+          alert("Student details updated successfully");
+        } catch (error) {
+          console.error("Error updating student details:", error);
+        } finally {
+          setIsSubmitting(false); // Reset submission state
+        }
+      }
+    };
+
+    submitData();
+  }, [isSubmitting, prn, formData]);
 
   const handleEdit = () => {
     setIsEditable(true);
@@ -98,7 +114,6 @@ const PersonalDetails = () => {
     <form onSubmit={handleSubmit} className="form-details-form">
       <h2>Fill Your Form</h2>
 
-      {/* Editable Fields Section */}
       <div className="editable-section">
         <h3>Editable Information</h3>
         <div className="form-row">
@@ -118,7 +133,7 @@ const PersonalDetails = () => {
             Phone Number:
             <input
               type="tel"
-              name="father_mobile_number"
+              name="student_mobile_number"
               value={formData.student_mobile_number}
               onChange={handleChange}
               readOnly={!isEditable}
@@ -172,75 +187,42 @@ const PersonalDetails = () => {
         {isChangesSaved && <button type="submit">Submit</button>}
       </div>
 
-      {/* Non-editable Fields Section */}
       <div className="non-editable-section">
         <h3>Non-Editable Information</h3>
         <div className="form-row">
-          <label>
-            Branch:
-            <input
-              type="text"
-              name="branch"
-              value={formData.branch}
-              readOnly
-            />
-          </label>
-
-          <label>
-            Date of Birth:
-            <input
-              type="text"
-              name="date_of_birth"
-              value={formData.date_of_birth}
-              readOnly
-            />
-          </label>
+          <label>Branch:</label>
+          <span>{formData.branch}</span>
         </div>
-        <div className="form-row">
-          <label>
-            Year of Admission:
-            <input
-              type="text"
-              name="year_of_admission"
-              value={formData.year_of_admission}
-              readOnly
-            />
-          </label>
 
-          <label>
-            Mother Tongue:
-            <input
-              type="text"
-              name="mother_tongue"
-              value={formData.mother_tongue}
-              readOnly
-            />
-          </label>
-        </div>
         <div className="form-row">
-          <label>
-            Blood Group:
-            <input
-              type="text"
-              name="blood_group"
-              value={formData.blood_group}
-              readOnly
-            />
-          </label>
+          <label>Date of Birth:</label>
+          <span>{formData.date_of_birth}</span>
+        </div>
+
+        <div className="form-row">
+          <label>Year of Admission:</label>
+          <span>{formData.year_of_admission}</span>
+        </div>
+
+        <div className="form-row">
+          <label>Mother Tongue:</label>
+          <span>{formData.mother_tongue}</span>
+        </div>
+
+        <div className="form-row">
+          <label>Blood Group:</label>
+          <span>{formData.blood_group}</span>
         </div>
       </div>
 
-      {/* Pop-up Confirmation */}
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>
-          <button type="button" onClick={() => setShowPopup(false)}>
+          <button type="button" onClick={handlePopupClose}>
             Close
           </button>
         </div>
       )}
-
-      {/* Submit Button appears only after Save Changes is clicked */}
     </form>
   );
 };

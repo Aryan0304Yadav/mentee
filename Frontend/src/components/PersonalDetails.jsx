@@ -195,57 +195,28 @@ const PersonalDetails = () => {
       <div className="non-editable-section">
         <h3>Non-Editable Information</h3>
         <div className="form-row">
-          <label>
-            Branch:
-            <input
-              type="text"
-              name="branch"
-              value={formData.branch}
-              readOnly
-            />
-          </label>
-
-          <label>
-            Date of Birth:
-            <input
-              type="text"
-              name="date_of_birth"
-              value={formData.date_of_birth}
-              readOnly
-            />
-          </label>
+          <label>Branch:</label>
+          <span>{formData.branch}</span>
         </div>
-        <div className="form-row">
-          <label>
-            Year of Admission:
-            <input
-              type="text"
-              name="year_of_admission"
-              value={formData.year_of_admission}
-              readOnly
-            />
-          </label>
 
-          <label>
-            Mother Tongue:
-            <input
-              type="text"
-              name="mother_tongue"
-              value={formData.mother_tongue}
-              readOnly
-            />
-          </label>
-        </div>
         <div className="form-row">
-          <label>
-            Blood Group:
-            <input
-              type="text"
-              name="blood_group"
-              value={formData.blood_group}
-              readOnly
-            />
-          </label>
+          <label>Date of Birth:</label>
+          <span>{formData.date_of_birth}</span>
+        </div>
+
+        <div className="form-row">
+          <label>Year of Admission:</label>
+          <span>{formData.year_of_admission}</span>
+        </div>
+
+        <div className="form-row">
+          <label>Mother Tongue:</label>
+          <span>{formData.mother_tongue}</span>
+        </div>
+
+        <div className="form-row">
+          <label>Blood Group:</label>
+          <span>{formData.blood_group}</span>
         </div>
       </div>
 

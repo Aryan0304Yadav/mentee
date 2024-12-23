@@ -63,6 +63,10 @@
   flex-direction: column; /* Ensure items are stacked vertically */
 }
 
+.dropdown-header {
+  cursor: pointer;
+}
+
 /* Dropdown Toggle Button */
 .dropdown-toggle {
   display: flex;

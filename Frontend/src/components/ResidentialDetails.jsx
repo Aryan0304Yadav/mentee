@@ -101,9 +101,16 @@ const ResidentialDetails = () => {
     setShowPopup(false); // Close the dialog box
 
     try {
+      const updatedData = {
+        new_currently_living_with: formData.currently_living_with,
+        new_current_address: formData.current_address,
+        new_permanent_address: formData.permanent_address,
+        new_state: formData.state_of_residence,
+        new_area: formData.area_of_residence,
+      };
       await axios.put(
         `http://localhost:3000/mentee/residential-details-put/${prn}`,
-        formData
+        updatedData
       );
       alert("Residential details updated successfully"); // Trigger the alert
     } catch (error) {

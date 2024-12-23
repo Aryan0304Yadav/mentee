@@ -1,6 +1,5 @@
 const express = require('express');
-const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch } = require('../controllers/mentee_controllers');
-const { client } = require('../database/db');
+const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put } = require('../controllers/mentee_controllers');
 
 const menteeRouter = express.Router();
 
@@ -17,6 +16,8 @@ menteeRouter.get('/misc-details-fetch/:id', async (req, res) => {
 });
 
 menteeRouter.get('/residential-details-fetch/:id', residential_details_fetch);
+
+menteeRouter.put('/residential-details-put/:id', residential_details_put);
 
 //Atharva
 

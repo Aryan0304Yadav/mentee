@@ -87,6 +87,23 @@ const residential_details_fetch = async (req, res) => {
   } catch {
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
-module.exports = { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch };
+const residential_details_put = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const query = 'UPDATE admission SET new_currently_living_with = $1, new_current_address = $2, new_permanent_address = $3, new_state = $4, new_area = $5 WHERE student_id = $6 RETURNING *';
+    const values = [req.body.new_currently_living_with, req.body.new_current_address, req.body.new_permanent_address, req.body.new_state, req.body.new_area, studentId];
+    const result = await client.query(query, values);
+    if (result.rows.length > 0) {
+      // Send back the result data in the response
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'Failed to update details' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put };

@@ -106,4 +106,22 @@ const residential_details_put = async (req, res) => {
   }
 };
 
-module.exports = { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put };
+const observations_fetch = async (req, res) => {
+  try {
+    const studentId = req.params.id; // Get the student_id from URL parameters
+    // Query the attendance table for the given student_id
+    const query = 'SELECT mentor_name, old_observation FROM mentor_observation WHERE student_id = $1 ORDER BY semester';
+    const result = await client.query(query, [studentId]);
+
+    if (result.rows.length > 0) {
+      // Send back the result data in the response
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'No data found for this student.' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { observations_fetch, attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put };

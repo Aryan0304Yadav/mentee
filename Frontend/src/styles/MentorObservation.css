@@ -1,29 +1,80 @@
-.mentor-observations-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 24px;
-  padding: 24px;
-
-}
-
-.mentor-observation-card {
-  background-color: #ecf1f5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  border-radius: 8px;
+.mentor-observations-table-container {
+  width: 100%;
+  min-height: 100vh;
+  /* Ensure it takes the full viewport height */
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  /* Center the table horizontally */
+  align-items: flex-start;
+  /* Align the table to the top */
+  padding-top: 0;
+  /* Ensure no padding at the top */
+  margin: 0;
+  /* Remove any margin */
+  box-sizing: border-box;
+  /* Ensure consistent sizing */
 }
 
-.mentor-name {
-  font-size: 18px;
+.mentor-observations-table {
+  width: 90%;
+  /* Occupy 90% of the screen width */
+  border-collapse: collapse;
+  /* Remove spacing between table cells */
+  background-color: #ffffff;
+  /* White background for the table */
+  border: 1px solid #ddd;
+  /* Light border around the table */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow for depth */
+}
+
+.mentor-observations-table th,
+.mentor-observations-table td {
+  padding: 16px;
+  /* Add spacing inside the cells */
+  text-align: left;
+  /* Align text to the left */
+  font-size: 1.1em;
+  /* Increase font size slightly */
+  border: 1px solid #e0e0e0;
+  /* Light border between cells */
+}
+
+.mentor-observations-table th {
+  background-color: #394867;
+  /* Darker blue header */
+  color: #ffffff;
+  /* White text for header */
   font-weight: bold;
-  margin-bottom: 8px;
-  color: #27374d;
+  /* Bold font for headers */
+  text-transform: uppercase;
+  /* Optional: uppercase text */
 }
 
-.observation-content {
-  flex-grow: 1;
-  white-space: wrap;
-  color: #526d82;
+.mentor-observations-table td {
+  color: #27374d;
+  /* Dark text for rows */
+}
+
+.mentor-observation-row:nth-child(even) td {
+  background-color: #f2f4f7;
+  /* Light zebra striping for even rows */
+}
+
+.mentor-observation-row:hover td {
+  background-color: #eaf2f8;
+  /* Subtle highlight on hover */
+}
+
+@media (max-width: 768px) {
+  .mentor-observations-table {
+    width: 100%;
+    /* Take full width on small screens */
+  }
+
+  .mentor-observations-table th,
+  .mentor-observations-table td {
+    font-size: 0.9em;
+    /* Reduce font size for smaller screens */
+  }
 }

@@ -1,77 +1,49 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "../styles/MentorObservation.css";
-
-const data = [
-  {
-    mentorName: "John Doe",
-    content:
-      "The student showed significant improvement in problem-solving skills.",
-  },
-  {
-    mentorName: "Jane Smith",
-    content:
-      "Attention to detail needs improvement, but overall participation is good.",
-  },
-  {
-    mentorName: "Robert Brown",
-    content:
-      "Excellent grasp of core concepts and timely submission of assignments.",
-  },
-  {
-    mentorName: "John Doe",
-    content:
-      "The student showed significant improvement in problem-solving skills.",
-  },
-  {
-    mentorName: "Jane Smith",
-    content:
-      "Attention to detail needs improvement, but overall participation is good.",
-  },
-  {
-    mentorName: "Robert Brown",
-    content:
-      "Excellent grasp of core concepts and timely submission of assignments.",
-  },
-];
+import { useParams } from "react-router-dom";
 
 const MentorObservations = () => {
   const [observations, setObservations] = useState([]);
+  const { prn } = useParams(); // Extract `prn` from route params
 
-  useEffect(()=>{
-setObservations(data)
-  },[])
+  useEffect(() => {
+    const fetchObservations = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/mentee/observations-fetch/${prn}`);
+        setObservations(response.data);
+      } catch (error) {
+        console.error("Error fetching mentor observations:", error);
+      }
+    };
 
-
-
-
-
-// useEffect(() => {
-
-//     const fetchObservations = async () => {
-//       const response = await fetch("/api/mentor-observations");
-//       const data = await response.json();
-//       setObservations(data);
-//     };
-//     fetchObservations();
-//   }, []);
+    fetchObservations();
+  }, [prn]);
 
   return (
-    <div className="mentor-observations-container">
-      {observations.map((observation, index) => (
-        <div key={index} className="mentor-observation-card">
-          <div className="mentor-name ">{observation.mentorName}</div>
-          <div className="observation-content">{observation.content}</div>
-        </div>
-      ))}
+    <div className="mentor-observations-table-container">
+      {observations.length > 0 ? (
+        <table className="mentor-observations-table">
+          <thead>
+            <tr>
+              <th>Mentor Name</th>
+              <th>Observation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {observations.map((observation, index) => (
+              <tr key={index} className="mentor-observation-row">
+                <td className="mentor-name-cell">{observation.mentor_name}</td>
+                <td className="observation-content-cell">{observation.old_observation}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="no-observations-message">No observations available.</div>
+      )}
     </div>
   );
 };
 
 export default MentorObservations;
-
-
-
-
-
-
-

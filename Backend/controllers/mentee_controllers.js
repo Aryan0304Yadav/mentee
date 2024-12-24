@@ -124,4 +124,22 @@ const observations_fetch = async (req, res) => {
   }
 };
 
-module.exports = { observations_fetch, attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put };
+const pre_admission_academic_details_fetch = async (req, res) => {
+  try {
+    const studentId = req.params.id; // Get the student_id from URL parameters
+    // Query the attendance table for the given student_id
+    const query = 'SELECT ssc_percentage, ssc_board, hsc_percentage, hsc_board, diploma_percentage, diploma_stream, cet_percentile, jee_percentile FROM admission WHERE student_id = $1';
+    const result = await client.query(query, [studentId]);
+
+    if (result.rows.length > 0) {
+      // Send back the result data in the response
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'No data found for this student.' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { pre_admission_academic_details_fetch, observations_fetch, attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put };

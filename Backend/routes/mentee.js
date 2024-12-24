@@ -1,5 +1,5 @@
 const express = require('express');
-const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put, observations_fetch } = require('../controllers/mentee_controllers');
+const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put, observations_fetch, pre_admission_academic_details_fetch } = require('../controllers/mentee_controllers');
 
 const menteeRouter = express.Router();
 
@@ -21,9 +21,7 @@ menteeRouter.put('/residential-details-put/:id', residential_details_put);
 
 //Atharva
 
-menteeRouter.get('/pre-admission-academic-details-fetch/:id', async (req, res) => {
-  res.send('hey');
-});
+menteeRouter.get('/pre-admission-academic-details-fetch/:id', pre_admission_academic_details_fetch);
 
 menteeRouter.get('/post-admission-academic-details-fetch/:id', async (req, res) => {
   res.send('hey');

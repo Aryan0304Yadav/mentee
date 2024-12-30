@@ -19,10 +19,10 @@ const PersonalDetails = () => {
     email: "",
   });
 
+  const [originalData, setOriginalData] = useState({});
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
+  const [isChangesSaved, setIsChangesSaved] = useState(false);
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -35,20 +35,23 @@ const PersonalDetails = () => {
           response.data.dob = DateTime.fromISO(response.data.dob).toISODate();
         }
 
-        setFormData({
-          fullname: response.data.old_name,
-          date_of_birth: response.data.dob,
-          branch: response.data.branch,
-          year_of_admission: response.data.year_of_admission,
-          mother_tongue: response.data.mother_tongue,
-          blood_group: response.data.blood_group,
-          health_problems: response.data.old_health_problems,
-          student_mobile_number: response.data.old_student_phone,
-          landline: response.data.old_res_landline,
-          email: response.data.old_student_email,
-        });
+        const fetchedData = {
+          fullname: response.data.old_name || "",
+          date_of_birth: response.data.dob || "",
+          branch: response.data.branch || "",
+          year_of_admission: response.data.year_of_admission || "",
+          mother_tongue: response.data.mother_tongue || "",
+          blood_group: response.data.blood_group || "",
+          health_problems: response.data.old_health_problems || "",
+          student_mobile_number: response.data.old_student_phone || "",
+          landline: response.data.old_res_landline || "",
+          email: response.data.old_student_email || "",
+        };
+
+        setFormData(fetchedData);
+        setOriginalData({ ...fetchedData }); 
       } catch (error) {
-        console.error("Error fetching student data or branch:", error);
+        console.error("Error fetching student data:", error);
       }
     };
 
@@ -62,52 +65,35 @@ const PersonalDetails = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleEdit = () => {
+    setIsEditable(true);
+    
+  };
+
+  const handleCancel = () => {
+    setFormData({ ...originalData }); 
+    setIsEditable(false);
+    setIsChangesSaved(false);
+  
+    // Force a re-render in case React's state batching skips immediate updates
+    setTimeout(() => setFormData({ ...originalData }), 0);
+  };
+
+  const handleSaveChanges = () => {
+    setOriginalData({ ...formData }); 
+    setIsEditable(false);
+    setIsChangesSaved(true);
+    alert("Changes saved successfully!");
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     setShowPopup(true);
   };
 
-  const handlePopupClose = async () => {
+  const handlePopupClose = () => {
     setShowPopup(false);
-    setIsSubmitting(true); // Trigger submission after popup is closed
-  };
-
-  useEffect(() => {
-    const submitData = async () => {
-      if (isSubmitting) {
-        try {
-          const updatedData = {
-            new_name: formData.fullname,
-            new_student_phone: formData.student_mobile_number,
-            new_student_email: formData.email,
-            new_res_landline: formData.landline,
-            new_health_problems: formData.health_problems,
-          };
-
-          await axios.put(
-            `http://localhost:3000/mentee/personal-details-put/${prn}`,
-            updatedData
-          );
-          alert("Student details updated successfully");
-        } catch (error) {
-          console.error("Error updating student details:", error);
-        } finally {
-          setIsSubmitting(false); // Reset submission state
-        }
-      }
-    };
-
-    submitData();
-  }, [isSubmitting, prn, formData]);
-
-  const handleEdit = () => {
-    setIsEditable(true);
-  };
-
-  const handleSaveChanges = () => {
-    setIsEditable(false);
-    setIsChangesSaved(true); // Mark changes as saved
-    alert("Changes saved successfully!");
+    setIsChangesSaved(false); 
   };
 
   return (
@@ -180,10 +166,24 @@ const PersonalDetails = () => {
             Edit
           </button>
         ) : (
-          <button type="button" onClick={handleSaveChanges}>
-            Save Changes
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={handleSaveChanges}
+              className="save-button"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="cancel-button"
+            >
+              Cancel
+            </button>
+          </>
         )}
+
         {isChangesSaved && <button type="submit">Submit</button>}
       </div>
 

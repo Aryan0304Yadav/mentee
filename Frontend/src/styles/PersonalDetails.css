@@ -19,13 +19,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  /* Add space between elements */
   margin-bottom: 15px;
 }
 
 .form-row label {
   flex: 1 1 45%;
-  /* Make labels take equal space, wrap if necessary */
   display: flex;
   flex-direction: column;
   font-size: 0.95rem;
@@ -40,15 +38,12 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 8px 10px;
-  /* Increased padding for breathing space */
   font-size: 1rem;
   margin-top: 5px;
-  /* Space between label and input */
 }
 
 textarea {
   resize: vertical;
-  /* Allow vertical resize for textareas */
   min-height: 80px;
 }
 
@@ -99,4 +94,17 @@ button:hover {
 
 .non-editable-section {
   margin-top: 10px;
+}
+
+.cancel-button {
+  background-color: #d9534f; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #c9302c; 
 }

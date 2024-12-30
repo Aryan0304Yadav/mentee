@@ -5,7 +5,7 @@ const data1 = [
   {
     "currentSemester": 4
   }
-]
+];
 
 const data2 = [
   {
@@ -142,38 +142,21 @@ const data2 = [
       }
     }
   }
-]
+];
 
 const PostAcademics = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [semesterData, setSemesterData] = useState({});
+  const [originalData, setOriginalData] = useState({});
   const [currentSemester, setCurrentSemester] = useState(1);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [showSubmitPopup, setShowSubmitPopup] = useState(false);
 
   useEffect(() => {
     setCurrentSemester(data1[0].currentSemester);
     setSemesterData(data2[0]);
+    setOriginalData(JSON.parse(JSON.stringify(data2[0]))); // Clone the initial data for reference
   }, []);
-
-  // Kept the fetch API comments as requested
-  // const fetchCurrentSemester = async () => {
-  //     try {
-  //       const response = await fetch('/api/current-semester');
-  //       const data = await response.json();
-  //       setCurrentSemester(data.currentSemester);
-  //     } catch (error) {
-  //       console.error('Error fetching current semester:', error);
-  //     }
-  //   };
-
-  //   const fetchSemesterData = async () => {
-  //     try {
-  //       const response = await fetch('/api/semester-data');
-  //       const data = await response.json();
-  //       setSemesterData(data);
-  //     } catch (error) {
-  //       console.error('Error fetching semester data:', error);
-  //     }
-  //   };
 
   const handleInputChange = (semesterNumber, subjectId, field, value) => {
     if (!isEditing) return;
@@ -184,19 +167,37 @@ const PostAcademics = () => {
     const maxValue = field === 'endSem' ? 100 : 20;
     if (parseFloat(value) > maxValue) return;
 
-    setSemesterData(prevData => {
+    setSemesterData((prevData) => {
       const newData = { ...prevData };
-      const subject = newData[semesterNumber].subjects.find(s => s.id === subjectId);
+      const subject = newData[semesterNumber].subjects.find((s) => s.id === subjectId);
       if (subject) {
         subject[field] = value;
+        setHasChanges(true); 
       }
       return newData;
     });
   };
 
-  const handleSubmit = () => {
-    console.log('Submitting changes:', semesterData);
+  const handleSaveChanges = () => {
+    alert('Changes saved successfully!'); 
     setIsEditing(false);
+    setHasChanges(false);
+  };
+
+  const handleSubmit = () => {
+    setShowSubmitPopup(true);
+  };
+
+  const handleCloseSubmitPopup = () => {
+    setShowSubmitPopup(false);
+    setIsEditing(false);
+    setHasChanges(false);
+  };
+
+  const handleCancel = () => {
+    setSemesterData(JSON.parse(JSON.stringify(originalData))); 
+    setIsEditing(false);
+    setHasChanges(false); 
   };
 
   return (
@@ -207,15 +208,13 @@ const PostAcademics = () => {
         const semesterNumber = index + 1;
         const semesterInfo = semesterData[semesterNumber] || {
           subjects: [],
-          nonEditable: { kts: 0, attempts: 0, cgpa: 0 }
+          nonEditable: { kts: 0, attempts: 0, cgpa: 0 },
         };
 
         return (
           <div className="semester-section" key={semesterNumber}>
             <h2 className="semester-title">Semester {semesterNumber}</h2>
-
             <div className="marks-section">
-              <h3 className="section-title"></h3>
               <table className="marks-table">
                 <thead>
                   <tr>
@@ -233,7 +232,9 @@ const PostAcademics = () => {
                         <input
                           type="text"
                           value={subject.ia1}
-                          onChange={(e) => handleInputChange(semesterNumber, subject.id, 'ia1', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange(semesterNumber, subject.id, 'ia1', e.target.value)
+                          }
                           disabled={!isEditing}
                         />
                       </td>
@@ -241,7 +242,9 @@ const PostAcademics = () => {
                         <input
                           type="text"
                           value={subject.ia2}
-                          onChange={(e) => handleInputChange(semesterNumber, subject.id, 'ia2', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange(semesterNumber, subject.id, 'ia2', e.target.value)
+                          }
                           disabled={!isEditing}
                         />
                       </td>
@@ -249,7 +252,9 @@ const PostAcademics = () => {
                         <input
                           type="text"
                           value={subject.endSem}
-                          onChange={(e) => handleInputChange(semesterNumber, subject.id, 'endSem', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange(semesterNumber, subject.id, 'endSem', e.target.value)
+                          }
                           disabled={!isEditing}
                         />
                       </td>
@@ -258,51 +263,40 @@ const PostAcademics = () => {
                 </tbody>
               </table>
             </div>
-
-            <div className="non-editable-section">
-              <h3 className="section-title">Semester Overview</h3>
-              <div className="non-editable-grid">
-                <div className="non-editable-item">
-                  <label>KTs</label>
-                  <div>{semesterInfo.nonEditable.kts}</div>
-                </div>
-                <div className="non-editable-item">
-                  <label>Attempts</label>
-                  <div>{semesterInfo.nonEditable.attempts}</div>
-                </div>
-                <div className="non-editable-item">
-                  <label>CGPA</label>
-                  <div>{semesterInfo.nonEditable.cgpa}</div>
-                </div>
-              </div>
-            </div>
           </div>
         );
       })}
 
       {!isEditing ? (
-        <button className="edit-button" onClick={() => setIsEditing(true)}>
-          Edit Details
-        </button>
+        <div>
+          <button className="edit-button" onClick={() => setIsEditing(true)}>
+            Edit
+          </button>
+          {hasChanges && (
+            <button className="submit-button" onClick={handleSubmit}>
+              Submit
+            </button>
+          )}
+        </div>
       ) : (
         <div>
-          <button
-            className="submit-button"
-            onClick={() => {
-              if (window.confirm('Are you sure you want to submit these changes for approval?\nChanges will be reflected only after they are approved.')) {
-                handleSubmit();
-              }
-            }}
-          >
-            Submit Changes
+          <button className="save-button" onClick={handleSaveChanges}>
+            Save Changes
           </button>
           <button
             className="cancel-button"
-            onClick={() => setIsEditing(false)}
-            style={{ marginLeft: '10px' }}
+            onClick={handleCancel}
+            style={{ backgroundColor: '#d9534f', color: '#fff' }}
           >
             Cancel
           </button>
+        </div>
+      )}
+
+      {showSubmitPopup && (
+        <div className="popup">
+          <p>Submitting changes for approval</p>
+          <button onClick={handleCloseSubmitPopup}>Close</button>
         </div>
       )}
     </div>

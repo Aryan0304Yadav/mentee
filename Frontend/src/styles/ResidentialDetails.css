@@ -24,9 +24,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* Space between label and input */
   margin-bottom: 15px;
-  /* Space below each row */
 }
 
 .form-row label {
@@ -56,11 +54,9 @@
 .yes-no-buttons {
   display: flex;
   gap: 20px;
-  /* Space between buttons */
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 20px;
-  /* Space below the button group */
   width: auto;
   margin-left: auto;
   margin-right: auto;
@@ -69,15 +65,12 @@
 .yes-no-buttons button {
   padding: 10px 20px;
   background-color: #f0f0f0;
-  /* Default background color */
   color: #000;
-  /* Text color set to black */
   border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   width: auto;
-  /* Make sure buttons take their natural width */
 }
 
 .yes-no-buttons button.selected {
@@ -87,7 +80,19 @@
 
 .yes-no-buttons button:hover {
   background-color: #dde6ed;
-  /* Light background on hover */
+}
+
+.cancel-button {
+  background-color: #d9534f; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #c9302c; 
 }
 
 /* Buttons (Edit/Save/Submit) */
@@ -154,6 +159,5 @@ button:hover {
 
 textarea {
   resize: vertical;
-  /* Allow vertical resize for textareas */
   min-height: 80px;
 }

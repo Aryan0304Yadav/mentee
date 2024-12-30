@@ -4,7 +4,7 @@ import axios from "axios";
 import "../styles/ParentDetails.css";
 
 const ParentDetails = () => {
-  const { prn } = useParams(); // Capture 'prn' from the route
+  const { prn } = useParams();
   const [formData, setFormData] = useState({
     father_name: "",
     father_occupation: "",
@@ -17,29 +17,31 @@ const ParentDetails = () => {
     guardian_mobile_number: "",
   });
 
+  const [originalData, setOriginalData] = useState({});
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
+  const [isChangesSaved, setIsChangesSaved] = useState(false);
 
-  // Fetch parent details when the component mounts
   useEffect(() => {
     const fetchParentDetails = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3000/mentee/parent-details-fetch/${prn}`
         );
-        setFormData({
-          father_name: response.data.old_father_name,
-          father_mobile_number: response.data.old_father_phone,
-          father_occupation: response.data.old_father_occupation,
-          mother_name: response.data.old_mother_name,
-          mother_mobile_number: response.data.old_mother_phone,
-          mother_occupation: response.data.old_mother_occupation,
-          guardian_name: response.data.old_guardian_name,
-          guardian_mobile_number: response.data.old_guardian_phone,
-          guardian_occupation: response.data.old_guardian_occupation,
-        }); // Populate the form with fetched data
+        const fetchedData = {
+          father_name: response.data.old_father_name || "",
+          father_mobile_number: response.data.old_father_phone || "",
+          father_occupation: response.data.old_father_occupation || "",
+          mother_name: response.data.old_mother_name || "",
+          mother_mobile_number: response.data.old_mother_phone || "",
+          mother_occupation: response.data.old_mother_occupation || "",
+          guardian_name: response.data.old_guardian_name || "",
+          guardian_mobile_number: response.data.old_guardian_phone || "",
+          guardian_occupation: response.data.old_guardian_occupation || "",
+        };
+        setFormData(fetchedData);
+        setOriginalData(fetchedData);
       } catch (error) {
         console.error("Error fetching parent details:", error);
       }
@@ -55,56 +57,31 @@ const ParentDetails = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setShowPopup(true); // Show confirmation popup before submission
-  };
-
-  const handlePopupClose = async () => {
-    setShowPopup(false);
-    setIsSubmitting(true); // Trigger submission after popup is closed
-  };
-
-  useEffect(() => {
-    const submitData = async () => {
-      if (isSubmitting) {
-        try {
-          const updatedData = {
-            new_father_name: formData.father_name,
-            new_father_phone: formData.father_mobile_number,
-            new_father_occupation: formData.father_occupation,
-            new_mother_name: formData.mother_name,
-            new_mother_phone: formData.mother_mobile_number,
-            new_mother_occupation: formData.mother_occupation,
-            new_guardian_name: formData.guardian_name,
-            new_guardian_phone: formData.guardian_mobile_number,
-            new_guardian_occupation: formData.guardian_occupation,
-          };
-
-          await axios.put(
-            `http://localhost:3000/mentee/parent-details-put/${prn}`,
-            updatedData
-          );
-          alert("Parent details submitted successfully!");
-        } catch (error) {
-          console.error("Error submitting parent details:", error);
-        } finally {
-          setIsSubmitting(false); // Reset submission state
-        }
-      }
-    };
-
-    submitData();
-  }, [isSubmitting, prn, formData]);
-
   const handleEdit = () => {
     setIsEditable(true);
   };
 
   const handleSaveChanges = () => {
+    setOriginalData({ ...formData });
     setIsEditable(false);
-    setIsChangesSaved(true); // Mark changes as saved
+    setIsChangesSaved(true);
     alert("Changes saved successfully!");
+  };
+
+  const handleCancel = () => {
+    setFormData({ ...originalData });
+    setIsEditable(false);
+    setIsChangesSaved(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    setIsChangesSaved(false); 
   };
 
   return (
@@ -134,8 +111,6 @@ const ParentDetails = () => {
               readOnly={!isEditable}
             />
           </label>
-        </div>
-        <div className="form-row">
           <label>
             Mobile Number:
             <input
@@ -172,8 +147,6 @@ const ParentDetails = () => {
               readOnly={!isEditable}
             />
           </label>
-        </div>
-        <div className="form-row">
           <label>
             Mobile Number:
             <input
@@ -210,8 +183,6 @@ const ParentDetails = () => {
               readOnly={!isEditable}
             />
           </label>
-        </div>
-        <div className="form-row">
           <label>
             Mobile Number:
             <input
@@ -225,19 +196,25 @@ const ParentDetails = () => {
         </div>
       </div>
 
-      {/* Buttons */}
       {!isEditable ? (
         <button type="button" onClick={handleEdit}>
           Edit
         </button>
       ) : (
-        <button type="button" onClick={handleSaveChanges}>
-          Save Changes
-        </button>
+        <>
+          <button type="button" onClick={handleSaveChanges}>
+            Save Changes
+          </button>
+          <button type="button" onClick={handleCancel} className="cancel-button">
+            Cancel
+          </button>
+        </>
       )}
-      {isChangesSaved && <button type="submit">Submit</button>}
 
-      {/* Pop-up Confirmation */}
+      {isChangesSaved && !isEditable && (
+        <button type="submit">Submit</button>
+      )}
+
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>

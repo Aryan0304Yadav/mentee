@@ -2,9 +2,7 @@
   display: flex;
   gap: 20px;
   height: 100vh;
-  /* Ensure it fills the screen height */
   overflow: hidden;
-  /* Prevent scrollbars */
 }
 
 .dashboard--content {
@@ -16,26 +14,21 @@
   gap: 1.5rem;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* Allow wrapping on smaller screens */
   overflow-y: auto;
-  /* Ensure content doesn't overflow */
 }
 
 @media (max-width: 1200px) {
   .dashboard {
     flex-direction: column;
-    /* Stack content on smaller screens */
   }
 
   .dashboard--content {
     gap: 1rem;
-    /* Reduce gap on smaller screens */
   }
 }
 
 @media (max-width: 768px) {
   .dashboard--content {
     padding: 1rem;
-    /* Adjust padding for mobile */
   }
 }

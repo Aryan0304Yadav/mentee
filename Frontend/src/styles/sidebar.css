@@ -1,15 +1,15 @@
 .menu {
   overflow-y: auto;
   height: 100%;
-  /* Ensures it takes up the full height of its container */
   max-height: 100vh;
-  /* Prevents it from exceeding the viewport height */
   position: sticky;
-  /* Makes it stay fixed relative to the viewport */
   top: 0;
-  /* Ensures it starts at the top of the viewport */
 }
 
+.menu::-webkit-scrollbar {
+  width: 0; 
+  height: 0; 
+}
 
 /* Logo styling */
 .logo {
@@ -66,7 +66,6 @@
 .dropdown {
   display: flex;
   flex-direction: column;
-  /* Ensure items are stacked vertically */
 }
 
 /* Dropdown Toggle Button */
@@ -85,7 +84,6 @@
 
 .dropdown-icon.open {
   transform: rotate(180deg);
-  /* Rotate the icon when dropdown is open */
 }
 
 /* Dropdown Menu Styling */
@@ -115,7 +113,6 @@
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item.active {
   background-color: #526d82;
-  /*Colour for the Drop down Act form sections*/
   color: #dde6ed;
 }
 

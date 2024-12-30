@@ -26,6 +26,19 @@
   color: #333;
 }
 
+.cancel-button {
+  background-color: #d9534f; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #c9302c; 
+}
+
 input,
 textarea {
   background-color: #dde6ed;

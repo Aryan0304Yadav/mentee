@@ -1,22 +1,21 @@
-// Backend/server.js
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
-// Import routes
-const studentRoutes = require('./routes/studentRoutes');
-const mentorRoutes = require('./routes/mentorRoutes');
-
+const menteeRouter = require('./routes/mentee');
+const { client } = require('./database/db');
 const app = express();
 
+const path = require('path');
+
+require('dotenv').config();
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(bodyParser.json());
 
-// Use routes
-app.use('/students', studentRoutes);
-app.use('/mentors', mentorRoutes);
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/mentee', menteeRouter);
 
-const PORT = 8800;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(process.env.PORT, async () => {
+  await client.connect();
 });

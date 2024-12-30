@@ -19,16 +19,27 @@ const ParentDetails = () => {
 
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
 
   // Fetch parent details when the component mounts
   useEffect(() => {
     const fetchParentDetails = async () => {
       try {
         const response = await axios.get(
-          `https://run.mocky.io/v3/b0f4943a-0bd1-406a-a596-849e0f07fe48`
+          `http://localhost:3000/mentee/parent-details-fetch/${prn}`
         );
-        setFormData(response.data); // Populate the form with fetched data
+        setFormData({
+          father_name: response.data.old_father_name,
+          father_mobile_number: response.data.old_father_phone,
+          father_occupation: response.data.old_father_occupation,
+          mother_name: response.data.old_mother_name,
+          mother_mobile_number: response.data.old_mother_phone,
+          mother_occupation: response.data.old_mother_occupation,
+          guardian_name: response.data.old_guardian_name,
+          guardian_mobile_number: response.data.old_guardian_phone,
+          guardian_occupation: response.data.old_guardian_occupation,
+        }); // Populate the form with fetched data
       } catch (error) {
         console.error("Error fetching parent details:", error);
       }
@@ -44,49 +55,57 @@ const ParentDetails = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleEdit = () => {
-    setIsEditable(true);
-  };
-
-  const handleSaveChanges = async () => {
-    try {
-      await axios.put(
-        `https://mentor-mentee-backend.vercel.app/parents/${prn}`,
-        formData
-      );
-      setIsEditable(false);
-    } catch (error) {
-      console.error("Error updating parent details:", error);
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setShowPopup(true); // Show confirmation popup before submission
   };
 
-  const handleClosePopup = async () => {
-    setShowPopup(false); // Close the first popup
-
-    try {
-      await axios.put(
-        `https://mentor-mentee-backend.vercel.app/parents/${prn}`,
-        formData
-      );
-
-      // After the API request completes, show the success alert
-      setShowSuccessAlert(true);
-    } catch (error) {
-      console.error("Error submitting parent details:", error);
-    }
+  const handlePopupClose = async () => {
+    setShowPopup(false);
+    setIsSubmitting(true); // Trigger submission after popup is closed
   };
 
   useEffect(() => {
-    if (showSuccessAlert) {
-      alert("Parent details submitted successfully!"); // Display the success alert once after the form is submitted
-      setShowSuccessAlert(false); // Reset the success alert state
-    }
-  }, [showSuccessAlert]);
+    const submitData = async () => {
+      if (isSubmitting) {
+        try {
+          const updatedData = {
+            new_father_name: formData.father_name,
+            new_father_phone: formData.father_mobile_number,
+            new_father_occupation: formData.father_occupation,
+            new_mother_name: formData.mother_name,
+            new_mother_phone: formData.mother_mobile_number,
+            new_mother_occupation: formData.mother_occupation,
+            new_guardian_name: formData.guardian_name,
+            new_guardian_phone: formData.guardian_mobile_number,
+            new_guardian_occupation: formData.guardian_occupation,
+          };
+
+          await axios.put(
+            `http://localhost:3000/mentee/parent-details-put/${prn}`,
+            updatedData
+          );
+          alert("Parent details submitted successfully!");
+        } catch (error) {
+          console.error("Error submitting parent details:", error);
+        } finally {
+          setIsSubmitting(false); // Reset submission state
+        }
+      }
+    };
+
+    submitData();
+  }, [isSubmitting, prn, formData]);
+
+  const handleEdit = () => {
+    setIsEditable(true);
+  };
+
+  const handleSaveChanges = () => {
+    setIsEditable(false);
+    setIsChangesSaved(true); // Mark changes as saved
+    alert("Changes saved successfully!");
+  };
 
   return (
     <form onSubmit={handleSubmit} className="form-details-form">
@@ -206,25 +225,23 @@ const ParentDetails = () => {
         </div>
       </div>
 
-      {/* Buttons Container */}
-      <div className="button-container">
-        {!isEditable ? (
-          <button type="button" onClick={handleEdit}>
-            Edit
-          </button>
-        ) : (
-          <button type="button" onClick={handleSaveChanges}>
-            Save Changes
-          </button>
-        )}
-        <button type="submit">Submit</button>
-      </div>
+      {/* Buttons */}
+      {!isEditable ? (
+        <button type="button" onClick={handleEdit}>
+          Edit
+        </button>
+      ) : (
+        <button type="button" onClick={handleSaveChanges}>
+          Save Changes
+        </button>
+      )}
+      {isChangesSaved && <button type="submit">Submit</button>}
 
       {/* Pop-up Confirmation */}
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>
-          <button type="button" onClick={handleClosePopup}>
+          <button type="button" onClick={handlePopupClose}>
             Close
           </button>
         </div>

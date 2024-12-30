@@ -1,126 +1,165 @@
-/* Form container styles */
-.form-details-form {
+.academic-details-container {
   width: 100%;
   margin: 0 auto;
   padding: 20px;
-  background: #f8f9fa; /* Neutral background color (same as pre) */
+  background: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
 }
 
-/* Header styling */
-.form-details-form h2 {
-  color: #526d82; /* Soft blue for heading (same as pre) */
+.semester-title {
+  color: #526d82;
   margin-bottom: 20px;
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-/* Table styling */
-table {
+.semester-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Table Styles */
+.marks-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-table th, table td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #dde6ed; /* Lighter border matching the pre theme */
+.marks-table th {
+  background: #dde6ed;
+  color: #526d82;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
 }
 
-table th {
-  background-color: #f1f5f9; /* Soft background matching pre */
-  color: #526d82; /* Soft blue text */
+.marks-table td {
+  padding: 12px;
+  border-bottom: 1px solid #dde6ed;
 }
 
-table td {
-  background-color: #fff; /* White background */
-}
-
-/* Editable Section */
-.editable-section {
-  background: #f1f5f9; /* Same soft background as pre */
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.editable-section h3 {
-  color: #526d82; /* Soft blue color */
-  text-align: center;
-}
-
-.editable-section input {
-  padding: 10px;
+.marks-table input[type="text"] {
+  width: 100%;
+  padding: 8px;
   border-radius: 5px;
   border: 1px solid #dde6ed;
-  background: #dde6ed; /* Light greyish background, similar to pre theme */
-  color: #526d82; /* Matching soft blue text */
-  width: 100%;
-  transition: border-color 0.2s ease-in-out;
+  background: #f8f9fa;
+  color: #526d82;
 }
 
-.editable-section input:focus {
-  border-color: #526d82; /* Focus border matching soft blue */
+.marks-table input[type="text"]:disabled {
+  background: #f8f9fa;
+  cursor: not-allowed;
 }
 
-button {
+.marks-table input[type="text"]:focus:not(:disabled) {
+  border-color: #526d82;
+  background: white;
+  outline: none;
+}
+
+/* Non-editable Section */
+.non-editable-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.non-editable-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.non-editable-item {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.non-editable-item label {
+  display: block;
+  color: #526d82;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.non-editable-item div {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Buttons */
+.edit-button,
+.submit-button {
   padding: 10px 20px;
-  background-color: #526d82; /* Matching the pre soft blue */
-  color: #fff;
+  border: none;
+  border-radius: 5px;
+  background-color: #526d82;
+  color: white;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto 0;
+  min-width: 150px;
+}
+
+.edit-button:hover,
+.submit-button:hover {
+  background-color: #145090;
+}
+
+.cancel-button {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
 }
 
-button:hover {
-  background-color: #145090; /* Darker blue on hover */
+.cancel-button:hover {
+  background-color: #c82333;
 }
 
-/* Semester Section */
-.semester-section {
-  margin-bottom: 30px;
+/* Error Message */
+.error-message {
+  color: #dc3545;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffebee;
+  border-radius: 4px;
 }
 
-.semester-section h4 {
-  color: #526d82; /* Soft blue for section header */
-  margin-bottom: 10px;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .non-editable-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 
-/* Submit Button */
-form button[type="submit"] {
-  background-color: #145090; /* Dark blue for submit button */
-}
+  .marks-table {
+    display: block;
+    overflow-x: auto;
+  }
 
-button[type="button"] {
-  background-color: #526d82; /* Same blue for regular buttons */
-  margin-top: 20px;
-  display: block;
-}
+  .marks-table th,
+  .marks-table td {
+    min-width: 120px;
+  }
 
+  .academic-details-container {
+    padding: 10px;
+  }
 
-.semester-buttons {
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 20px;
-  gap: 15px;
-  color: black;
-}
-
-.semester-buttons button {
-  padding: 10px 20px;
-  background-color: #f0f0f0; /* Neutral background for semester buttons */
-  border: 1px solid #ccc;
-  cursor: pointer;
-  color: black;
-}
-
-.semester-buttons button.active {
-  background-color: #526d82; /* Matching the pre soft blue */
-  color: rgb(255, 255, 255);
-}
-
-.semester-buttons button:hover {
-  background-color: #e0e0e0; /* Light hover effect */
+  .semester-section {
+    padding: 15px;
+  }
 }

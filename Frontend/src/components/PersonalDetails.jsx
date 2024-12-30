@@ -7,54 +7,46 @@ import "../styles/PersonalDetails.css";
 const PersonalDetails = () => {
   const { prn } = useParams();
   const [formData, setFormData] = useState({
-    photo: null,
-    branch: "",
-    ac_id: "",
     fullname: "",
     date_of_birth: "",
+    branch: "",
     year_of_admission: "",
     mother_tongue: "",
     blood_group: "",
     health_problems: "",
-    current_address: "",
-    father_name: "",
-    father_occupation: "",
-    father_mobile_number: "",
+    student_mobile_number: "",
     landline: "",
-    mother_name: "",
-    mother_occupation: "",
-    mother_mobile_number: "",
     email: "",
-    residenceOption: "",
-    relativeName: "",
-    relativeContact: "",
-    guardianName: "",
-    guardianContact: "",
-    friendName: "",
-    friendContact: "",
-    hostelName: "",
-    hostelContact: "",
   });
 
   const [isEditable, setIsEditable] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [isChangesSaved, setIsChangesSaved] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isChangesSaved, setIsChangesSaved] = useState(false); // Track if changes are saved
 
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
         const response = await axios.get(
-          `https://mentor-mentee-backend.vercel.app/students/${prn}`
+          `http://localhost:3000/mentee/personal-details-fetch/${prn}`
         );
-        const studentData = response.data;
 
-        if (studentData.date_of_birth) {
-          studentData.date_of_birth = DateTime.fromISO(
-            studentData.date_of_birth
-          ).toISODate();
+        if (response.data.dob) {
+          response.data.dob = DateTime.fromISO(response.data.dob).toISODate();
         }
 
-        setFormData(studentData);
+        setFormData({
+          fullname: response.data.old_name,
+          date_of_birth: response.data.dob,
+          branch: response.data.branch,
+          year_of_admission: response.data.year_of_admission,
+          mother_tongue: response.data.mother_tongue,
+          blood_group: response.data.blood_group,
+          health_problems: response.data.old_health_problems,
+          student_mobile_number: response.data.old_student_phone,
+          landline: response.data.old_res_landline,
+          email: response.data.old_student_email,
+        });
       } catch (error) {
         console.error("Error fetching student data or branch:", error);
       }
@@ -72,30 +64,41 @@ const PersonalDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowPopup(true); // Show confirmation popup
+    setShowPopup(true);
   };
 
   const handlePopupClose = async () => {
-    setShowPopup(false); // Hide confirmation popup
-
-    try {
-      const updatedData = {
-        ...formData,
-        date_of_birth: DateTime.fromISO(formData.date_of_birth).toISO(),
-      };
-
-      await axios.put(
-        `https://mentor-mentee-backend.vercel.app/students/${prn}`,
-        updatedData
-      );
-
-      setTimeout(() => {
-        alert("Student details updated successfully"); // Show alert after the popup is closed
-      }, 0);
-    } catch (error) {
-      console.error("Error updating student details:", error);
-    }
+    setShowPopup(false);
+    setIsSubmitting(true); // Trigger submission after popup is closed
   };
+
+  useEffect(() => {
+    const submitData = async () => {
+      if (isSubmitting) {
+        try {
+          const updatedData = {
+            new_name: formData.fullname,
+            new_student_phone: formData.student_mobile_number,
+            new_student_email: formData.email,
+            new_res_landline: formData.landline,
+            new_health_problems: formData.health_problems,
+          };
+
+          await axios.put(
+            `http://localhost:3000/mentee/personal-details-put/${prn}`,
+            updatedData
+          );
+          alert("Student details updated successfully");
+        } catch (error) {
+          console.error("Error updating student details:", error);
+        } finally {
+          setIsSubmitting(false); // Reset submission state
+        }
+      }
+    };
+
+    submitData();
+  }, [isSubmitting, prn, formData]);
 
   const handleEdit = () => {
     setIsEditable(true);
@@ -111,7 +114,6 @@ const PersonalDetails = () => {
     <form onSubmit={handleSubmit} className="form-details-form">
       <h2>Fill Your Form</h2>
 
-      {/* Editable Fields Section */}
       <div className="editable-section">
         <h3>Editable Information</h3>
         <div className="form-row">
@@ -131,8 +133,8 @@ const PersonalDetails = () => {
             Phone Number:
             <input
               type="tel"
-              name="father_mobile_number"
-              value={formData.father_mobile_number}
+              name="student_mobile_number"
+              value={formData.student_mobile_number}
               onChange={handleChange}
               readOnly={!isEditable}
               required
@@ -173,25 +175,18 @@ const PersonalDetails = () => {
           </label>
         </div>
 
-        {/* Edit Button */}
-        <button type="button" onClick={handleEdit} disabled={isEditable}>
-          Edit
-        </button>
-
-        {/* Save Changes Button */}
-        {isEditable && (
+        {!isEditable ? (
+          <button type="button" onClick={handleEdit}>
+            Edit
+          </button>
+        ) : (
           <button type="button" onClick={handleSaveChanges}>
             Save Changes
           </button>
         )}
-
-        {/* Submit Button */}
-        <button type="submit" disabled={!isChangesSaved}>
-          Submit
-        </button>
+        {isChangesSaved && <button type="submit">Submit</button>}
       </div>
 
-      {/* Non-editable Fields Section */}
       <div className="non-editable-section">
         <h3>Non-Editable Information</h3>
         <div className="form-row">
@@ -220,7 +215,6 @@ const PersonalDetails = () => {
         </div>
       </div>
 
-      {/* Pop-up Confirmation */}
       {showPopup && (
         <div className="popup">
           <p>Submitting Changes for Approval</p>

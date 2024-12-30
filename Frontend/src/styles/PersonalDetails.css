@@ -1,5 +1,6 @@
 /* General container styling */
-.editable-section, .non-editable-section {
+.editable-section,
+.non-editable-section {
   background-color: #f0f0f0;
   padding: 20px;
   margin-bottom: 20px;
@@ -7,7 +8,8 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.editable-section h3, .non-editable-section h3 {
+.editable-section h3,
+.non-editable-section h3 {
   color: #526d82;
   margin-bottom: 15px;
 }
@@ -16,12 +18,14 @@
 .form-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Add space between elements */
+  gap: 20px;
+  /* Add space between elements */
   margin-bottom: 15px;
 }
 
 .form-row label {
-  flex: 1 1 45%; /* Make labels take equal space, wrap if necessary */
+  flex: 1 1 45%;
+  /* Make labels take equal space, wrap if necessary */
   display: flex;
   flex-direction: column;
   font-size: 0.95rem;
@@ -35,13 +39,16 @@
   color: #526d82;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 8px 10px; /* Increased padding for breathing space */
+  padding: 8px 10px;
+  /* Increased padding for breathing space */
   font-size: 1rem;
-  margin-top: 5px; /* Space between label and input */
+  margin-top: 5px;
+  /* Space between label and input */
 }
 
 textarea {
-  resize: vertical; /* Allow vertical resize for textareas */
+  resize: vertical;
+  /* Allow vertical resize for textareas */
   min-height: 80px;
 }
 
@@ -93,5 +100,3 @@ button:hover {
 .non-editable-section {
   margin-top: 10px;
 }
-
-

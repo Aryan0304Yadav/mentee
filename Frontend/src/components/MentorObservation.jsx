@@ -1,31 +1,47 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/MentorObservation.css";
+import { useParams } from "react-router-dom";
 
 const MentorObservations = () => {
   const [observations, setObservations] = useState([]);
+  const { prn } = useParams(); // Extract `prn` from route params
 
   useEffect(() => {
     const fetchObservations = async () => {
       try {
-        const response = await axios.get("https://run.mocky.io/v3/9a075dc9-5df8-442d-8a8f-d6d5d4099af4"); // Replace with your Mocky API URL
+        const response = await axios.get(`http://localhost:3000/mentee/observations-fetch/${prn}`);
         setObservations(response.data);
       } catch (error) {
-        console.error("Error fetching mentor observations", error);
+        console.error("Error fetching mentor observations:", error);
       }
     };
 
     fetchObservations();
-  }, []);
+  }, [prn]);
 
   return (
-    <div className="mentor-observations-container">
-      {observations.map((observation, index) => (
-        <div key={index} className="mentor-observation-card">
-          <div className="mentor-name">{observation.mentorName}</div>
-          <div className="observation-content">{observation.content}</div>
-        </div>
-      ))}
+    <div className="mentor-observations-table-container">
+      {observations.length > 0 ? (
+        <table className="mentor-observations-table">
+          <thead>
+            <tr>
+              <th>Mentor Name</th>
+              <th>Observation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {observations.map((observation, index) => (
+              <tr key={index} className="mentor-observation-row">
+                <td className="mentor-name-cell">{observation.mentor_name}</td>
+                <td className="observation-content-cell">{observation.old_observation}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="no-observations-message">No observations available.</div>
+      )}
     </div>
   );
 };

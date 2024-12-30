@@ -13,6 +13,14 @@
   padding: 20px;    /* Adds padding inside the sidebar */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
   z-index: 1000;   /* Ensures the sidebar is above other elements */
+
+  /* Hide scrollbar but allow scrolling */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.menu::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
 /* Logo styling */

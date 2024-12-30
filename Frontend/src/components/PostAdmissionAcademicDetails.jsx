@@ -1,148 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/PostAdmissionAcademicDetails.css'
-
-const data1 = [
-  {
-    "currentSemester": 4
-  }
-];
-
-const data2 = [
-  {
-    "1": {
-      "subjects": [
-        {
-          "id": "cs101",
-          "name": "Engineering Mathematics",
-          "ia1": "18",
-          "ia2": "19",
-          "endSem": "75",
-          "credits": 4
-        },
-        {
-          "id": "cs102",
-          "name": "Data Structures",
-          "ia1": "17",
-          "ia2": "20",
-          "endSem": "82",
-          "credits": 4
-        },
-        {
-          "id": "cs103",
-          "name": "Digital Logic Design",
-          "ia1": "16",
-          "ia2": "18",
-          "endSem": "70",
-          "credits": 3
-        }
-      ],
-      "nonEditable": {
-        "kts": 0,
-        "attempts": 1,
-        "cgpa": 8.7
-      }
-    },
-    "2": {
-      "subjects": [
-        {
-          "id": "cs201",
-          "name": "Computer Networks",
-          "ia1": "19",
-          "ia2": "18",
-          "endSem": "78",
-          "credits": 4
-        },
-        {
-          "id": "cs202",
-          "name": "Operating Systems",
-          "ia1": "20",
-          "ia2": "19",
-          "endSem": "85",
-          "credits": 4
-        },
-        {
-          "id": "cs203",
-          "name": "Database Management",
-          "ia1": "18",
-          "ia2": "17",
-          "endSem": "73",
-          "credits": 3
-        }
-      ],
-      "nonEditable": {
-        "kts": 0,
-        "attempts": 1,
-        "cgpa": 8.7
-      }
-    },
-    "3": {
-      "subjects": [
-        {
-          "id": "cs301",
-          "name": "Web Technologies",
-          "ia1": "17",
-          "ia2": "19",
-          "endSem": "72",
-          "credits": 4
-        },
-        {
-          "id": "cs302",
-          "name": "Software Engineering",
-          "ia1": "18",
-          "ia2": "20",
-          "endSem": "80",
-          "credits": 4
-        },
-        {
-          "id": "cs303",
-          "name": "Machine Learning",
-          "ia1": "16",
-          "ia2": "18",
-          "endSem": "75",
-          "credits": 3
-        }
-      ],
-      "nonEditable": {
-        "kts": 1,
-        "attempts": 2,
-        "cgpa": 8.2
-      }
-    },
-    "4": {
-      "subjects": [
-        {
-          "id": "cs401",
-          "name": "Artificial Intelligence",
-          "ia1": "19",
-          "ia2": "18",
-          "endSem": "82",
-          "credits": 4
-        },
-        {
-          "id": "cs402",
-          "name": "Cloud Computing",
-          "ia1": "17",
-          "ia2": "19",
-          "endSem": "76",
-          "credits": 4
-        },
-        {
-          "id": "cs403",
-          "name": "Information Security",
-          "ia1": "18",
-          "ia2": "20",
-          "endSem": "78",
-          "credits": 3
-        }
-      ],
-      "nonEditable": {
-        "kts": 0,
-        "attempts": 1,
-        "cgpa": 8.4
-      }
-    }
-  }
-];
+import '../styles/PostAdmissionAcademicDetails.css';
 
 const PostAcademics = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -152,10 +9,27 @@ const PostAcademics = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [showSubmitPopup, setShowSubmitPopup] = useState(false);
 
+  // Fetch data from the API
   useEffect(() => {
-    setCurrentSemester(data1[0].currentSemester);
-    setSemesterData(data2[0]);
-    setOriginalData(JSON.parse(JSON.stringify(data2[0]))); // Clone the initial data for reference
+    // Replace this with your actual API endpoint
+    const fetchData = async () => {
+      try {
+        // Example API requests - replace with real endpoint
+        const semesterResponse = await fetch('/api/current-semester');
+        const semesterData = await semesterResponse.json();
+        const academicDataResponse = await fetch('/api/academic-details');
+        const academicData = await academicDataResponse.json();
+
+        // Set the fetched data to state
+        setCurrentSemester(semesterData.currentSemester);
+        setSemesterData(academicData);
+        setOriginalData(JSON.parse(JSON.stringify(academicData))); // Clone the initial data for reference
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleInputChange = (semesterNumber, subjectId, field, value) => {
@@ -172,14 +46,14 @@ const PostAcademics = () => {
       const subject = newData[semesterNumber].subjects.find((s) => s.id === subjectId);
       if (subject) {
         subject[field] = value;
-        setHasChanges(true); 
+        setHasChanges(true);
       }
       return newData;
     });
   };
 
   const handleSaveChanges = () => {
-    alert('Changes saved successfully!'); 
+    alert('Changes saved successfully!');
     setIsEditing(false);
     setHasChanges(false);
   };
@@ -195,9 +69,9 @@ const PostAcademics = () => {
   };
 
   const handleCancel = () => {
-    setSemesterData(JSON.parse(JSON.stringify(originalData))); 
+    setSemesterData(JSON.parse(JSON.stringify(originalData)));
     setIsEditing(false);
-    setHasChanges(false); 
+    setHasChanges(false);
   };
 
   return (

@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "../styles/ResidentialDetails.css";
 
 const ResidentialDetails = () => {
-  const permanent = React.useRef("");
+  const permanent = useRef("");
+  const current = useRef("");
   const { prn } = useParams();
 
   const [formData, setFormData] = useState({
     currently_living_with: "",
     current_address: "",
     permanent_address: "",
-    state_of_residence: "Maharashtra", 
+    state_of_residence: "Maharashtra",
     area_of_residence: "",
   });
 
   const [originalData, setOriginalData] = useState({});
-  const [isEditable, setIsEditable] = useState(false); 
-  const [showPopup, setShowPopup] = useState(false); 
-  const [isSameAddress, setIsSameAddress] = useState(false); 
-  const [isChangesSaved, setIsChangesSaved] = useState(false); 
+  const [isEditable, setIsEditable] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isSameAddress, setIsSameAddress] = useState(false);
+  const [isChangesSaved, setIsChangesSaved] = useState(false);
 
   const states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -46,6 +47,7 @@ const ResidentialDetails = () => {
           area_of_residence: response.data.old_area || "",
         };
         permanent.current = data.permanent_address; // Store original permanent address
+        current.current = data.current_address; // Store original current address
         setFormData(data);
         setOriginalData(data);
       } catch (error) {
@@ -91,6 +93,7 @@ const ResidentialDetails = () => {
   const handleCancel = () => {
     setFormData({ ...originalData });
     setIsEditable(false);
+    setIsSameAddress(false);
     setIsChangesSaved(false);
   };
 
@@ -149,6 +152,7 @@ const ResidentialDetails = () => {
             type="button"
             onClick={() => handleYesNoChange("yes")}
             className={isSameAddress ? "selected" : ""}
+            disabled={!isEditable}
           >
             Yes
           </button>
@@ -156,6 +160,7 @@ const ResidentialDetails = () => {
             type="button"
             onClick={() => handleYesNoChange("no")}
             className={!isSameAddress ? "selected" : ""}
+            disabled={!isEditable}
           >
             No
           </button>

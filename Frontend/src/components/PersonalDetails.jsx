@@ -49,7 +49,7 @@ const PersonalDetails = () => {
         };
 
         setFormData(fetchedData);
-        setOriginalData({ ...fetchedData }); 
+        setOriginalData({ ...fetchedData });
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -67,20 +67,20 @@ const PersonalDetails = () => {
 
   const handleEdit = () => {
     setIsEditable(true);
-    
+
   };
 
   const handleCancel = () => {
-    setFormData({ ...originalData }); 
+    setFormData({ ...originalData });
     setIsEditable(false);
     setIsChangesSaved(false);
-  
+
     // Force a re-render in case React's state batching skips immediate updates
     setTimeout(() => setFormData({ ...originalData }), 0);
   };
 
   const handleSaveChanges = () => {
-    setOriginalData({ ...formData }); 
+    setOriginalData({ ...formData });
     setIsEditable(false);
     setIsChangesSaved(true);
     alert("Changes saved successfully!");
@@ -93,7 +93,7 @@ const PersonalDetails = () => {
 
   const handlePopupClose = () => {
     setShowPopup(false);
-    setIsChangesSaved(false); 
+    setIsChangesSaved(false);
   };
 
   return (
@@ -184,7 +184,9 @@ const PersonalDetails = () => {
           </>
         )}
 
-        {isChangesSaved && <button type="submit">Submit</button>}
+        {isChangesSaved && !isEditable && (
+          <button type="submit">Submit</button>
+        )}
       </div>
 
       <div className="non-editable-section">

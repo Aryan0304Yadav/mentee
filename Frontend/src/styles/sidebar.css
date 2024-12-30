@@ -3,16 +3,24 @@
   display: flex;
   flex-direction: column;
   gap: 2.3rem;
-  height: 94vh;
+  height: 100vh; /* Full height of the viewport */
+  position: fixed; /* Keeps the sidebar fixed in place */
+  top: 0;          /* Aligns it to the top of the viewport */
+  left: 0;         /* Aligns it to the left of the viewport */
+  width: 250px;    /* Sidebar width */
+  background-color: #dde6ed; /* Adjust as needed for your design */
+  overflow-y: auto; /* Allows scrolling only inside the sidebar if content overflows */
+  padding: 20px;    /* Adds padding inside the sidebar */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+  z-index: 1000;   /* Ensures the sidebar is above other elements */
 }
 
 /* Logo styling */
 .logo {
   text-align: center;
-  padding: 20px;
   color: #27374d;
-  align-items: center;
   display: flex;
+  align-items: center;
   gap: 20px;
 }
 
@@ -60,7 +68,7 @@
 /* Dropdown Container */
 .dropdown {
   display: flex;
-  flex-direction: column; /* Ensure items are stacked vertically */
+  flex-direction: column;
 }
 
 /* Dropdown Toggle Button */
@@ -78,7 +86,7 @@
 }
 
 .dropdown-icon.open {
-  transform: rotate(180deg); /* Rotate the icon when dropdown is open */
+  transform: rotate(180deg);
 }
 
 /* Dropdown Menu Styling */
@@ -90,7 +98,7 @@
   margin-top: 10px;
   background-color: #dde6ed;
   padding: 10px;
-  border-radius: 8px 8px 8px 8px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -107,6 +115,6 @@
 
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item.active {
-  background-color: #526d82; /*Colour for the Drop down Act form sections*/
+  background-color: #526d82;
   color: #dde6ed;
 }

@@ -1,34 +1,23 @@
-/* Sidebar container */
 .menu {
-  display: flex;
-  flex-direction: column;
-  gap: 2.3rem;
-  height: 100vh; /* Full height of the viewport */
-  position: fixed; /* Keeps the sidebar fixed in place */
-  top: 0;          /* Aligns it to the top of the viewport */
-  left: 0;         /* Aligns it to the left of the viewport */
-  width: 250px;    /* Sidebar width */
-  background-color: #dde6ed; /* Adjust as needed for your design */
-  overflow-y: auto; /* Allows scrolling only inside the sidebar if content overflows */
-  padding: 20px;    /* Adds padding inside the sidebar */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
-  z-index: 1000;   /* Ensures the sidebar is above other elements */
-
-  /* Hide scrollbar but allow scrolling */
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  overflow-y: auto;
+  height: 100%;
+  /* Ensures it takes up the full height of its container */
+  max-height: 100vh;
+  /* Prevents it from exceeding the viewport height */
+  position: sticky;
+  /* Makes it stay fixed relative to the viewport */
+  top: 0;
+  /* Ensures it starts at the top of the viewport */
 }
 
-.menu::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Opera */
-}
 
 /* Logo styling */
 .logo {
   text-align: center;
+  padding: 20px;
   color: #27374d;
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 20px;
 }
 
@@ -77,6 +66,7 @@
 .dropdown {
   display: flex;
   flex-direction: column;
+  /* Ensure items are stacked vertically */
 }
 
 /* Dropdown Toggle Button */
@@ -95,6 +85,7 @@
 
 .dropdown-icon.open {
   transform: rotate(180deg);
+  /* Rotate the icon when dropdown is open */
 }
 
 /* Dropdown Menu Styling */
@@ -106,7 +97,7 @@
   margin-top: 10px;
   background-color: #dde6ed;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 8px 8px 8px 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -119,6 +110,16 @@
   border-radius: 5px;
   transition: 0.3s ease-in-out;
   font-weight: 500;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item.active {
+  background-color: #526d82;
+  /*Colour for the Drop down Act form sections*/
+  color: #dde6ed;
+}
+
+font-weight: 500;
 }
 
 .dropdown-menu .dropdown-item:hover,

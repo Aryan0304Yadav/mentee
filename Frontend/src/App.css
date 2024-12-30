@@ -1,70 +1,117 @@
+/* Main Dashboard Container */
 .dashboard {
   display: flex;
   gap: 20px;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
+  /* Allow vertical scrolling */
+  overflow-x: hidden;
+  /* Prevent horizontal scrolling */
+  flex-wrap: wrap;
+  /* Allow content to wrap when necessary */
 }
 
+/* Dashboard Content */
 .dashboard--content {
   background: #fff;
   flex: 3;
-  /* Adjust flex-basis for content */
+  /* Take up 3 parts of the space */
   border-radius: 20px;
   padding: 2rem;
   display: flex;
   gap: 1.5rem;
   overflow-y: auto;
-  align-items: center;
-  max-height: fit-content;
-  margin-top: 2%;
+  /* Ensure scrolling for overflowing content */
+  align-items: flex-start;
+  /* Align content to the top */
+  height: auto;
+  /* Remove height constraints */
 }
 
+/* Attendance Chart Section */
 .attendance-chart {
   flex: 3;
   /* Allocate more space to the chart */
   min-width: 0;
-  /* Prevent overflow */
+  /* Prevent the chart from causing overflow */
   min-height: fit-content;
+  /* Ensure proper height */
+  width: 100%;
+  /* Use full width */
 }
 
+/* Profile Section */
 .profile {
-  flex-wrap: nowrap;
   flex: 1;
-  /* Allow profile to take up 1 part of the remaining space */
-  /* padding: 20px; */
+  /* Allow profile to take 1 part of the space */
   background: #dde6ed;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Add a slight shadow */
   display: flex;
   flex-direction: column;
+  /* Stack profile elements vertically */
   align-items: center;
-  width: 90%;
+  /* Center align profile content */
   max-width: 300px;
-  margin: 0;
-  /* Push to the right */
+  /* Limit the profile width */
+  min-width: 200px;
+  /* Avoid shrinking too much */
+  width: 100%;
+  /* Ensure responsiveness */
+  margin: 0 auto;
+  /* Center the profile horizontally */
+  padding: 1rem;
+  /* Add spacing inside the profile box */
 }
 
+/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
+
+  /* Stack Dashboard Items on Smaller Screens */
   .dashboard {
     flex-direction: column;
+    gap: 1rem;
+    /* Reduce gap for smaller screens */
+    height: auto;
+    /* Allow dynamic height */
   }
 
   .dashboard--content {
     flex: 1;
+    width: 100%;
+    /* Take full width on smaller screens */
+    margin-top: 0;
+    /* Remove extra margin */
+    padding: 1rem;
+    /* Adjust padding */
   }
 
   .attendance-chart,
   .profile {
     width: 100%;
-    /* Full width on smaller screens */
+    /* Make full width */
     max-width: none;
+    /* Remove max-width constraints */
+    margin: 0;
+    /* Remove extra margin */
   }
 }
 
 @media (max-width: 480px) {
 
+  /* Adjust Padding and Layout on Very Small Screens */
   .attendance-chart,
   .profile {
     padding: 10px;
+    flex-direction: column;
+    /* Stack content vertically */
+  }
+
+  .profile {
+    padding: 10px;
+    /* Reduce padding */
+    text-align: center;
+    /* Center align text and elements */
   }
 }

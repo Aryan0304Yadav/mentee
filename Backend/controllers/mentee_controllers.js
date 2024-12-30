@@ -183,20 +183,47 @@ const pre_admission_academic_details_fetch = async (req, res) => {
 const post_admission_academic_details_fetch = async (req, res) => {
   try {
     const studentId = req.params.id; // Get the student_id from URL parameters
-    // Query the attendance table for the given student_id
-    const query = 'SELECT semester, subject_name, old_ia1, old_ia2, old_endsem FROM ia_sem_marks WHERE student_id = $1';
-    const result = await client.query(query, [studentId]);
+    const currentSem = req.params.current_sem; // Get the current semester from URL parameters
+
+    // Query the ia_sem_marks table for the given student_id and semesters less than current_sem
+    const query = 'SELECT semester, subject_name, old_ia1, old_ia2, old_endsem FROM ia_sem_marks WHERE student_id = $1 AND semester < $2 ORDER BY semester';
+    const result = await client.query(query, [studentId, currentSem]);
 
     if (result.rows.length > 0) {
-      // Send back the result data in the response
-      res.json(result.rows[0]);
+      // Structure the data as expected by the frontend (PostAcademics component)
+      const semesterData = {};
+      result.rows.forEach((row) => {
+        const { semester, subject_name, old_ia1, old_ia2, old_endsem } = row;
+
+        // Initialize semester if it doesn't exist
+        if (!semesterData[semester]) {
+          semesterData[semester] = { subjects: [] };
+        }
+
+        // Add the subject data for the current semester
+        semesterData[semester].subjects.push({
+          id: subject_name, // Assuming subject_name is used as an ID, adjust if needed
+          name: subject_name,
+          ia1: old_ia1,
+          ia2: old_ia2,
+          endSem: old_endsem
+        });
+      });
+
+      // Send back the current semester and the structured semester data
+      res.json({
+        currentSemester: currentSem,
+        semesterData
+      });
     } else {
       res.status(404).json({ message: 'No data found for this student.' });
     }
-  } catch {
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 const post_admission_academic_details_put = async (req, res) => {
   try {
@@ -388,5 +415,22 @@ const achievements_after_put = async (req, res) => {
   }
 };
 
+const current_semester_fetch = async (req, res) => {
+  try {
+    const studentId = req.params.id; // Get the student_id from URL parameters
+    // Query the attendance table for the given student_id
+    const query = 'SELECT current_semester FROM unknown WHERE student_id = $1';
+    const result = await client.query(query, [studentId]);
 
-module.exports = { parent_details_put, parent_details_fetch, pre_admission_academic_details_fetch, observations_fetch, attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put, misc_details_fetch, misc_details_put, post_admission_academic_details_fetch, post_admission_academic_details_put, achievements_before_fetch, achievements_before_put, achievements_after_fetch, achievements_after_put };
+    if (result.rows.length > 0) {
+      // Send back the result data in the response
+      res.json({ currentSemester: result.rows[0].current_semester });
+    } else {
+      res.status(404).json({ message: 'No data found for this student.' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { current_semester_fetch, parent_details_put, parent_details_fetch, pre_admission_academic_details_fetch, observations_fetch, attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put, misc_details_fetch, misc_details_put, post_admission_academic_details_fetch, post_admission_academic_details_put, achievements_before_fetch, achievements_before_put, achievements_after_fetch, achievements_after_put };

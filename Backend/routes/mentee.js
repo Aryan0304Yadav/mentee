@@ -1,5 +1,5 @@
 const express = require('express');
-const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put, observations_fetch, pre_admission_academic_details_fetch, parent_details_fetch, parent_details_put, misc_details_fetch, misc_details_put, post_admission_academic_details_fetch, post_admission_academic_details_put, achievements_before_fetch, achievements_before_put, achievements_after_fetch, achievements_after_put } = require('../controllers/mentee_controllers');
+const { attendance_fetch, dashboard_fetch, personal_details_fetch, personal_details_put, residential_details_fetch, residential_details_put, observations_fetch, pre_admission_academic_details_fetch, parent_details_fetch, parent_details_put, misc_details_fetch, misc_details_put, post_admission_academic_details_fetch, post_admission_academic_details_put, achievements_before_fetch, achievements_before_put, achievements_after_fetch, achievements_after_put, current_semester_fetch } = require('../controllers/mentee_controllers');
 
 const menteeRouter = express.Router();
 
@@ -21,7 +21,7 @@ menteeRouter.put('/residential-details-put/:id', residential_details_put);
 
 menteeRouter.get('/pre-admission-academic-details-fetch/:id', pre_admission_academic_details_fetch);
 
-menteeRouter.get('/post-admission-academic-details-fetch/:id', post_admission_academic_details_fetch);
+menteeRouter.get('/post-admission-academic-details-fetch/:id/:current_sem', post_admission_academic_details_fetch);
 
 menteeRouter.put('/post-admission-academic-details-put/:id', post_admission_academic_details_put);
 
@@ -38,5 +38,7 @@ menteeRouter.put('/achievements-before-put/:id', achievements_before_put);
 menteeRouter.get('/achievements-after-fetch/:id', achievements_after_fetch);
 
 menteeRouter.put('/achievements-after-put/:id', achievements_after_put);
+
+menteeRouter.get('/current-semester-fetch/:id', current_semester_fetch);
 
 module.exports = menteeRouter;

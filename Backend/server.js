@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const menteeRouter = require('./routes/mentee');
+const mentorRouter = require('./routes/mentor');
+
 const { client } = require('./database/db');
 const app = express();
 
@@ -19,3 +21,5 @@ app.use('/mentee', menteeRouter);
 app.listen(process.env.PORT, async () => {
   await client.connect();
 });
+
+app.use('/mentor', mentorRouter);
